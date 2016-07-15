@@ -1,0 +1,33 @@
+package com.mjzk.agv.test;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+/**
+ * 测试
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class Test {
+
+	public static void main(String[] args) {
+
+		try {
+			ServerSocket serverSocket = new ServerSocket(1088) ;
+			Socket socket = serverSocket.accept() ;
+			DataInputStream inputStream = new DataInputStream(socket.getInputStream()) ;
+			byte[] bytes = new byte[512] ;
+			int length = inputStream.read(bytes) ;
+			System.out.println("the value of x is: " + length);
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+}

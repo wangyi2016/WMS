@@ -1,0 +1,37 @@
+/** the style of header.jsp **/
+.header {
+	padding:0px;
+	margin:0px;
+}
+
+.header img{
+	float : left ;
+	margin-top:10px;
+}
+#nav li{
+	line-height:25px;
+	margin-top:10px;
+	font-size:20px;
+	font-family:Microsoft YaHei
+}
+._user{
+	float:right;
+	margin-right:20px;
+	margin-top:55px;
+	link-height:30px;
+	font-family:helvetica,tahoma,verdana,sans-serif;
+	font-size:13px;
+	color:gray;
+}
+a:link, a:visited {
+	color: gray;
+	text-decoration: none; /*超链接无下划线*/
+}
+
+a:hover {
+	text-decoration: none; /*鼠标放上去有下划线*/
+	color: #EE7942;
+}
+.dialog-button{
+   text-align:center;
+}

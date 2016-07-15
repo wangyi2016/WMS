@@ -1,0 +1,47 @@
+package com.mjzk.agv.factory;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.mjzk.agv.beans.Agv;
+import com.mjzk.agv.beans.AgvState;
+import com.mjzk.agv.common.Common;
+import com.mjzk.agv.map.MapManager;
+import com.mjzk.agv.pojo.AgvRTData;
+
+/**
+ * 
+ * AGv数据加工厂
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class AGVDataProcessFactory {
+
+	/**
+	 * 获取AGV的实时数据
+	 * 
+	 * @return
+	 */
+	public static List<AgvRTData> geAgvRTDatas() {
+		List<AgvRTData> list = new ArrayList<AgvRTData>();
+		Map<Agv, AgvState> state = Common.state;
+		Set<Agv> set = state.keySet();
+		Iterator<Agv> iterator = set.iterator();
+		while (iterator.hasNext()) {
+			Agv agv = iterator.next();
+			AgvState agvState = state.get(agv);
+			MapManager manager = new MapManager(agv);
+			String time = agvState.getTime().toString();
+			AgvRTData data = new AgvRTData(agv.getAgv_code(), agv.getIp_Adr(), agv.getProduct_num(), agv.getTaskName(),agv.getTaskCode(),
+					agvState.getLink(), manager.getCurNode(agvState.getCurrent_rfid()).getName(),
+					manager.getCurNode(agvState.getTarget_rfid()).getName(), agvState.getElectric(),
+					agvState.getReal_spd(), agvState.getRun_state(), time);
+			list.add(data);
+		}
+		return list;
+	}
+}

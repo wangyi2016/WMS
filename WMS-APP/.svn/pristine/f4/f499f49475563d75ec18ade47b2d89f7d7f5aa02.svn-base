@@ -1,0 +1,33 @@
+package com.mjzk.agv.test;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
+import org.w3c.dom.ls.LSInput;
+
+public class Test3 {
+
+	public static final List<String> list = new ArrayList<String>();
+	
+	public static void main(String[] args) {
+
+		Queue<String> queue = new LinkedList<String>();
+		queue.offer("1");
+		queue.offer("2");
+
+		queue.poll();
+
+		for (String string : queue) {
+			System.out.println("the queue value is: " + string);
+		}
+
+		
+		list.add("1");
+		list.add("2");
+		
+		List<String> lStrings = new ArrayList<String>() ;
+	
+	}
+}

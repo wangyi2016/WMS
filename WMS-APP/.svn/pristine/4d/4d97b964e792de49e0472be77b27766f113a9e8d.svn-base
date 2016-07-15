@@ -1,0 +1,18 @@
+package com.mjzk.agv.utils;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.ContextLoader;
+
+/**
+ * 主动获取 bean
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class SpringBeanUtil {
+
+	public static <T> T getBean(Class<T> clazz, String beanName) {
+		ApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
+		return (T) context.getBean(beanName);
+	}
+}

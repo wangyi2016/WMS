@@ -1,0 +1,38 @@
+package com.mjzk.agv.serviceimpl;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.mjzk.agv.beans.Agv;
+import com.mjzk.agv.beans.AgvState;
+import com.mjzk.agv.daoimpl.AGVDao;
+
+@Service
+public class AgvService {
+
+	@Resource
+	private AGVDao agvDao ;
+	
+	@Transactional
+	public void add(Agv agv){
+		agvDao.save(agv);
+	}
+	
+	public List<Agv> findAll(){
+		return agvDao.findAll();
+	}
+	
+	@Transactional
+	public int getTotalCount(){
+		return agvDao.findAll().size() ;
+	}
+	
+	@Transactional
+	public List<Agv> findByPage(int page,int pageSize){
+		return agvDao.findByPage(page, pageSize) ;
+	}
+}

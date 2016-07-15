@@ -1,0 +1,245 @@
+package com.mjzk.agv.beans;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+@Entity
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class Agv {
+
+	/**
+	 * 表id
+	 */
+	private int id;
+
+	/**
+	 * agv 编码
+	 */
+	private String agv_code;
+
+	/**
+	 * agv 描述
+	 */
+	private String agv_desc;
+
+	/**
+	 * agv的IP地址
+	 */
+	private String ip_Adr;
+
+	/**
+	 * 是否立马运行 ， 默认为false
+	 */
+	private boolean run_Flag;
+
+
+	/**
+	 * 预设速度
+	 */
+	private int initSpd;
+
+	/**
+	 * 预设方向 left 0 , right 1
+	 */
+	private short direction;
+	
+	/**
+	 * 生产线
+	 */
+	private int product_num ;
+	
+	/**
+	 * 是否标记了 结点，如果是该AGV标记了结点，则该AGV可以通过，其他AGV暂停。默认为 false
+	 */
+	private boolean mark ;
+	
+	/**
+	 * 当前电量
+	 */
+	private float battery ;
+	
+	/**
+	 * 电量下限值
+	 */
+	private int lowBattery ;
+	
+	/**
+	 * 任务名称
+	 */
+	private String taskName ;
+	
+	/**
+	 * 行驶路径
+	 */
+	private String link ;
+	
+	/**
+	 * 当前速度
+	 */
+	private int curSpd ;
+	
+	/**
+	 * 是否启用
+	 */
+	private int go ;
+
+	public Agv() {
+		this.run_Flag = false;
+		this.initSpd = 5;
+		this.direction = 0;
+		this.mark = false ;
+	}
+
+	public Agv(int id, String agv_code, String agv_desc, String ip_Adr, boolean run_Flag, boolean free_Flag,
+			float initSpd, short direction) {
+		super();
+		this.id = id;
+		this.agv_code = agv_code;
+		this.agv_desc = agv_desc;
+		this.ip_Adr = ip_Adr;
+		this.run_Flag = true;
+		this.initSpd = 0;
+		this.direction = 0;
+	}
+
+	@Id
+	@GeneratedValue
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getAgv_code() {
+		return agv_code;
+	}
+
+	public void setAgv_code(String agv_code) {
+		this.agv_code = agv_code;
+	}
+
+	public String getAgv_desc() {
+		return agv_desc;
+	}
+
+	public void setAgv_desc(String agv_desc) {
+		this.agv_desc = agv_desc;
+	}
+
+	public String getIp_Adr() {
+		return ip_Adr;
+	}
+
+	public void setIp_Adr(String ip_Adr) {
+		this.ip_Adr = ip_Adr;
+	}
+
+	public boolean isRun_Flag() {
+		return run_Flag;
+	}
+
+	public void setRun_Flag(boolean run_Flag) {
+		this.run_Flag = run_Flag;
+	}
+
+
+
+	public int getInitSpd() {
+		return initSpd;
+	}
+
+	public void setInitSpd(int initSpd) {
+		this.initSpd = initSpd;
+	}
+	@Transient
+	public short getDirection() {
+		return direction;
+	}
+
+	public void setDirection(short direction) {
+		this.direction = direction;
+	}
+
+	public int getProduct_num() {
+		return product_num;
+	}
+
+	public void setProduct_num(int product_num) {
+		this.product_num = product_num;
+	}
+
+	public boolean isMark() {
+		return mark;
+	}
+
+	public void setMark(boolean mark) {
+		this.mark = mark;
+	}
+	public float getBattery() {
+		return battery;
+	}
+
+	public void setBattery(float battery) {
+		this.battery = battery;
+	}
+
+	@Transient
+	public int getLowBattery() {
+		return lowBattery;
+	}
+
+	public void setLowBattery(int lowBattery) {
+		this.lowBattery = lowBattery;
+	}
+
+	@Transient
+	public String getTaskName() {
+		return taskName;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
+	}
+
+	@Transient
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+
+	@Transient
+	public int getCurSpd() {
+		return curSpd;
+	}
+
+	public void setCurSpd(int curSpd) {
+		this.curSpd = curSpd;
+	}
+
+	@Transient
+	public int getGo() {
+		return go;
+	}
+
+	public void setGo(int go) {
+		this.go = go;
+	}
+
+	@Override
+	public String toString() {
+		return "Agv [id=" + id + ", agv_code=" + agv_code + ", agv_desc=" + agv_desc + ", ip_Adr=" + ip_Adr
+				+ ", run_Flag=" + run_Flag + ", initSpd=" + initSpd + ", direction=" + direction + ", product_num="
+				+ product_num + ", mark=" + mark + ", battery=" + battery + ", lowBattery=" + lowBattery + ", taskName="
+				+ taskName + ", link=" + link + ", curSpd=" + curSpd + ", go=" + go + "]";
+	}
+}

@@ -1,0 +1,253 @@
+package com.mjzk.agv.beans;
+
+import java.sql.Timestamp;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+@Entity
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class AgvState {
+
+	/**
+	 * 表 id
+	 */
+	private int ID;
+
+	/**
+	 * agv 的唯一编码
+	 */
+	private String code;
+
+	/**
+	 * agv 连接是否正常 默认为false 未连接
+	 */
+	private boolean link_flag;
+
+	/**
+	 * 调度状态 ： true 已调度 false 未调度 默认为false
+	 */
+	private boolean schedule_state;
+
+	/**
+	 * 运行状态 ： 0 未知 1 运行中 2 暂停 3 充电 默认为0
+	 */
+	private int run_state;
+
+	/**
+	 * 生成线编号 默认为0
+	 */
+	private short product_num;
+
+	/**
+	 * AGV的行进线路
+	 */
+    private String link ;
+
+	/**
+	 * 当前地标 默认为 null
+	 */
+	private int current_rfid;
+
+	/**
+	 * 目标地标 默认为 null
+	 */
+	private int target_rfid;
+
+	/**
+	 * 当前电量 默认为0
+	 */
+	private int electric;
+
+	/**
+	 * 实时运行速度 默认为0
+	 */
+	private int real_spd;
+
+	/**
+	 * 续航距离长度 默认为 0
+	 */
+	private float distance;
+
+	/**
+	 * 实时运行时间
+	 */
+	private Timestamp time;
+
+	/**
+	 * 方向 Left 0 , Right 1 没有存入到数据库中
+	 */
+	private int direction;
+	
+	/**
+	 * 任务编码 , 默认为 0
+	 */
+	private int taskCode ;
+
+	/**
+	 * 构造函数
+	 */
+	public AgvState() {
+		ID = 0;
+		this.code = null;
+		this.link_flag = false;
+		this.schedule_state = false;
+		this.run_state = 0;
+		this.product_num = 0;
+		this.current_rfid = 0;
+		this.target_rfid = 0;
+		this.electric = 0;
+		this.real_spd = 0;
+		this.distance = 0;
+		this.time = null;
+		this.taskCode = 0 ;
+		this.link = "";
+	}
+
+	public AgvState(int iD, String code, boolean link_flag, boolean schedule_state, short run_state,
+			short product_num,  int current_rfid, int target_rfid, short electric,
+			int real_spd, float distance, Timestamp time,int taskCode) {
+		super();
+		ID = iD;
+		this.code = code;
+		this.link_flag = link_flag;
+		this.schedule_state = schedule_state;
+		this.run_state = run_state;
+		this.product_num = product_num;
+		this.current_rfid = current_rfid;
+		this.target_rfid = target_rfid;
+		this.electric = electric;
+		this.real_spd = real_spd;
+		this.distance = distance;
+		this.time = time;
+		this.taskCode = taskCode ;
+	}
+
+	@Id
+	@GeneratedValue
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public boolean isLink_flag() {
+		return link_flag;
+	}
+
+	public void setLink_flag(boolean link_flag) {
+		this.link_flag = link_flag;
+	}
+
+	public boolean isSchedule_state() {
+		return schedule_state;
+	}
+
+	public void setSchedule_state(boolean schedule_state) {
+		this.schedule_state = schedule_state;
+	}
+
+	public int getRun_state() {
+		return run_state;
+	}
+
+	public void setRun_state(int run_state) {
+		this.run_state = run_state;
+	}
+
+	public short getProduct_num() {
+		return product_num;
+	}
+
+	public void setProduct_num(short product_num) {
+		this.product_num = product_num;
+	}
+	public int getCurrent_rfid() {
+		return current_rfid;
+	}
+
+	public void setCurrent_rfid(int current_rfid) {
+		this.current_rfid = current_rfid;
+	}
+
+	public int getTarget_rfid() {
+		return target_rfid;
+	}
+
+	public void setTarget_rfid(int target_rfid) {
+		this.target_rfid = target_rfid;
+	}
+
+	public int getElectric() {
+		return electric;
+	}
+
+	public void setElectric(int electric) {
+		this.electric = electric;
+	}
+
+	public int getReal_spd() {
+		return real_spd;
+	}
+
+	public void setReal_spd(int real_spd) {
+		this.real_spd = real_spd;
+	}
+
+	public float getDistance() {
+		return distance;
+	}
+
+	public void setDistance(float distance) {
+		this.distance = distance;
+	}
+
+	public Timestamp getTime() {
+		return time;
+	}
+
+	public void setTime(Timestamp time) {
+		this.time = time;
+	}
+
+	@Transient
+	public int getDirection() {
+		return direction;
+	}
+
+	public void setDirection(int direction) {
+		this.direction = direction;
+	}
+
+	public int getTaskCode() {
+		return taskCode;
+	}
+
+	public void setTaskCode(int taskCode) {
+		this.taskCode = taskCode;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+}

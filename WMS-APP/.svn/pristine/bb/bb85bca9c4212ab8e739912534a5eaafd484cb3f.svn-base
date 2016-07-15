@@ -1,0 +1,140 @@
+package com.mjzk.agv.beans;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+
+@Entity
+public class Task {
+
+	/**
+	 * 任务编码
+	 */
+	private String task_code;
+
+	/**
+	 * 任务表ID
+	 */
+	private int id;
+
+	/**
+	 * 任务名称
+	 */
+	private String name;
+
+	/**
+	 * 起始RFID
+	 */
+	private int startRfid;
+
+	/**
+	 * 目标RFID
+	 */
+	private int targetRfid;
+
+	/**
+	 * 任务的优先级
+	 */
+	private short Priority;
+	
+	/**
+	 * 任务RFID 列表
+	 */
+	private String rfidLink ;
+	
+	/** 任务状态 **/
+	private boolean status;
+	
+	/***
+	 * 是否启用
+	 */
+	private int go ;
+
+	public Task() {
+         this.Priority = 1 ;
+         this.status = false ;
+	}
+	
+	public String getTask_code() {
+		return task_code;
+	}
+
+	public void setTask_code(String task_code) {
+		this.task_code = task_code;
+	}
+
+	@Id
+	@GeneratedValue
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public short getPriority() {
+		return Priority;
+	}
+
+	public void setPriority(short priority) {
+		Priority = priority;
+	}
+
+	public int getStartRfid() {
+		return startRfid;
+	}
+
+	public void setStartRfid(int startRfid) {
+		this.startRfid = startRfid;
+	}
+
+	public int getTargetRfid() {
+		return targetRfid;
+	}
+
+	public void setTargetRfid(int targetRfid) {
+		this.targetRfid = targetRfid;
+	}
+
+	public String getRfidLink() {
+		return rfidLink;
+	}
+
+	public void setRfidLink(String rfidLink) {
+		this.rfidLink = rfidLink;
+	}
+
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+
+	@Transient
+	public int getGo() {
+		return go;
+	}
+
+	public void setGo(int go) {
+		this.go = go;
+	}
+
+	@Override
+	public String toString() {
+		return "Task [task_code=" + task_code + ", id=" + id + ", name=" + name + ", startRfid=" + startRfid
+				+ ", targetRfid=" + targetRfid + ", Priority=" + Priority + ", rfidLink=" + rfidLink + ", status="
+				+ status + ", go=" + go + "]";
+	}
+}

@@ -1,0 +1,58 @@
+package com.mjzk.agv.schedule;
+
+import com.mjzk.agv.beans.Agv;
+import com.mjzk.agv.beans.Task;
+import com.mjzk.agv.common.Common;
+import com.mjzk.agv.communicate.CommunicateHandler;
+import com.mjzk.agv.serviceimpl.AgvStateService;
+import com.mjzk.agv.utils.SpringBeanUtil;
+
+/**
+ * 调度线程
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class ScheduleHandler implements Runnable {
+
+	/**
+	 * 在多线程中不能被动的注入实体bean,所以这里采用主动注入
+	 */
+	private final AgvStateService stateService = SpringBeanUtil.getBean(AgvStateService.class, "agvStateService");
+
+	public ScheduleHandler() {
+
+	};
+
+	public void run() {
+
+		System.out.println("start the schedule and waiting to schedule task .....");
+
+		while (true) {
+
+			if (Common.T_QUEUE.getQueue().size() != 0 && Common.V_QUEUE.getQueue().size() != 0) {
+
+				System.out.println("已开始一个任务调度 ......");
+
+				/** 如果任务队列不为空，则需要调度，完成队列中的任务 **/
+				Task task = Common.T_QUEUE.getTask();
+				Agv agv = Common.V_QUEUE.getVehicle();
+
+				System.out.println(
+						"当前队列中，还有任务  " + Common.T_QUEUE.getSize() + " 个" + " 空闲小车 " + Common.V_QUEUE.getSize() + " 个");
+
+				Common.pool.execute(new CommunicateHandler(agv, stateService, task)); /** 启动通信进程 **/
+				break;
+
+			} else {
+				System.out.println("当前没有调度任务");
+			}
+			try {
+				Thread.sleep(3 * 1000); /** 每隔2秒钟检测一次 **/
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		System.out.println("已停止任务监控线程 ...............");
+	}
+}

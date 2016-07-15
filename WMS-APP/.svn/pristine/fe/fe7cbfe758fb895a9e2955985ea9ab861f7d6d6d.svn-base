@@ -1,0 +1,49 @@
+package com.mjzk.agv.pojo;
+
+/** 指令集 **/
+public class InstructSet {
+	byte runstatus;
+	byte targetSpd;
+	byte leftOrRight;
+	byte targetRfid;
+
+	public InstructSet() {
+		super();
+		this.runstatus = 0;
+		this.targetSpd = 0;
+		this.leftOrRight = 0;
+		this.targetRfid = 0;
+	}
+
+	public byte getRunstatus() {
+		return runstatus;
+	}
+
+	public void setRunstatus(byte runstatus) {
+		this.runstatus = runstatus;
+	}
+
+	public byte getTargetSpd() {
+		return targetSpd;
+	}
+
+	public void setTargetSpd(byte targetSpd) {
+		this.targetSpd = targetSpd;
+	}
+
+	public byte getLeftOrRight() {
+		return leftOrRight;
+	}
+
+	public void setLeftOrRight(byte leftOrRight) {
+		this.leftOrRight = leftOrRight;
+	}
+
+	public byte getTargetRfid() {
+		return targetRfid;
+	}
+
+	public void setTargetRfid(byte targetRfid) {
+		this.targetRfid = targetRfid;
+	}
+}

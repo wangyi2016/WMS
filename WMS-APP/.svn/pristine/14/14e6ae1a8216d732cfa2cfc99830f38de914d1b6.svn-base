@@ -1,0 +1,34 @@
+package com.mjzk.agv.task;
+
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import com.mjzk.agv.algorithm.Floyd;
+import com.mjzk.agv.beans.Task;
+import com.mjzk.agv.map.MapManager;
+import com.mjzk.agv.pojo.Node;
+
+/**
+ * 任务管理
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class TaskManager {
+
+	/**
+	 * 通过任务中的起始目标点，获取task的行驶路径
+	 * 
+	 * @param startrfid
+	 * @param endrfid
+	 * @return
+	 */
+	public static List<Node> getTaskList(int startrfid, int endrfid,Logger logger) {
+		
+		logger.info("正在计算行驶路径 .............");
+		
+		List<Integer> list = new Floyd().getShortPath(startrfid, endrfid);
+		return MapManager.getPathNode(list);
+	}
+}

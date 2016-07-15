@@ -1,0 +1,126 @@
+$(function(){
+//	agvManage();
+	agvState();
+
+//	window.setInterval('Reflashe()',2000) ;
+//	window.setTimeout( 'Reflashe()', 2000) ;
+})
+
+/**AGV实时状态**/
+function agvState(){
+	
+	$("#box").datagrid({
+		url:"mjzk/agvstate.action",
+//		fit:true,
+		fitColumns:true,
+		striped:true,
+		rownumbers:true,
+		border:false,
+	    pagination:true,
+	    sortOrder:'desc',
+	    striped:true,
+		columns:[[
+		          {
+		        	  field:'agvCode',
+		        	  width:100,
+		        	  title:'AGV编码'
+		          },
+		          {
+		        	  field:'ip_Adr',
+		        	  width:100,
+		        	  title:'AGV IP地址'
+		          },
+
+		          {
+		        	  field:'prodNum',
+		        	  width:100,
+		        	  title:'所在生产线'
+		          },
+		          {
+		        	  field:'taskName',
+		        	  width:100,
+		        	  title:'任务描述'
+		          },
+		          {
+		        	  field:'link',
+		        	  width:150,
+		        	  title:'行进线路'
+		          },
+		          {
+		        	  field:'curFRID',
+		        	  width:100,
+		        	  title:'当前RFID'
+		          },
+		          {
+		        	  field:'targetRFID',
+		        	  width:100,
+		        	  title:'目标RFID'
+		          },
+		          {
+		        	  field:'curElectric',
+		        	  width:100,
+		        	  title:'当前电量'
+		          },
+		          {
+		        	  field:'curSpd',
+		        	  width:100,
+		        	  title:'当前速度'
+		          },
+		          {
+						field : 'runState',
+						title : '状态',
+						width:100,
+						formatter : function(value,row,index) {
+							if(value == 1){
+								return '运行中...';
+							}else{
+								return '空闲' ;
+							}
+						}
+				},
+								          {
+									field : 'time',
+									width : 100,
+									title : '实时时间',
+									formatter : function(value, row, index) {
+										var unixTimestamp = new Date(value);
+										return unixTimestamp.toLocaleString();
+									}
+								},
+							{
+									field : 'opt',
+									title : '操作',
+									width:100,
+									formatter : function(value,row,index) {
+										var btn = "<a class='editcls' href='javascript:void(0)' onclick='javascript:Reflashe()';>编辑</a>";
+										return btn;
+									}
+							} 
+		    ]]
+	})
+}
+
+/** 实时获取AGV的相关信息 **/
+function Reflashe(){
+    var newRows = new Array() ;
+    $.ajax({
+    	type:"post",
+    	dataType:"json",
+    	url: "mjzk/agvstate.action",
+    	async:false,
+    	success:function(data){
+    		var object = eval(data) ;
+    		newRows = object.rows ;
+    //		alert(newRows[0].curFRID) ;
+    	}
+    })
+    
+    var columns = $("#box").datagrid("options").columns ;
+    var rows = $("#box").datagrid('getRows');
+    var rowIndex = $("#box").datagrid('getRowIndex',rows[0]) ;
+    rows[0][columns[0][5].field] = newRows[0].curFRID;
+    rows[0][columns[0][7].field] = newRows[0].curElectric;
+    rows[0][columns[0][8].field] = newRows[0].curSpd;
+    $("#box").datagrid('refreshRow',rowIndex) ;
+}
+

@@ -1,0 +1,96 @@
+package com.mjzk.agv.beans;
+
+import java.sql.Timestamp;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+@Entity
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class LoginHis {
+
+	/**
+	 * 表id
+	 */
+	private int id ;
+	
+	/**
+	 * 登录账号
+	 */
+	private String account ;
+	
+	/**
+	 * 登录IP
+	 */
+	private String ip_Adr ;
+	
+	/**
+	 * 登录时间
+	 */
+	private Timestamp time ;
+	
+	/**
+	 * 登录时长
+	 */
+	private float duration ;
+	
+	/**
+	 * 下线时间
+	 */
+	private Timestamp off_line;
+
+	@Id
+	@GeneratedValue
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getAccount() {
+		return account;
+	}
+
+	public void setAccount(String account) {
+		this.account = account;
+	}
+
+	public String getIp_Adr() {
+		return ip_Adr;
+	}
+
+	public void setIp_Adr(String ip_Adr) {
+		this.ip_Adr = ip_Adr;
+	}
+
+	public Timestamp getTime() {
+		return time;
+	}
+
+	public void setTime(Timestamp time) {
+		this.time = time;
+	}
+
+	public float getDuration() {
+		return duration;
+	}
+
+	public void setDuration(float duration) {
+		this.duration = duration;
+	}
+
+	public Timestamp getOff_line() {
+		return off_line;
+	}
+
+	public void setOff_line(Timestamp off_line) {
+		this.off_line = off_line;
+	}
+}

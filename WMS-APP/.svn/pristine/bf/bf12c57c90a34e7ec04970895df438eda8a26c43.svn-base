@@ -1,0 +1,38 @@
+package com.mjzk.agv.test;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class Test4 {
+
+	/**
+	 * 读寄存器 指令
+	 */
+	public static final byte[] READ_REG = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x01, 0x03, 0x00, 0x00, 0x00, 0x0a };
+
+	/**
+	 * 读寄存器指令前缀
+	 */
+	public static byte[] PRE_READ_REG = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x01, 0x03, 0x00, 0x00 };
+
+	/**
+	 * 写寄存器指令 前缀
+	 */
+	public static byte[] PRE_WRITE_REG = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x01, 0x10, 0x00, 0x00, 0x00, 0x03, 0x06,
+			0x02, 0x00, 0x03, 0x00, 0x00, 0x44 };
+
+	
+	public static void main(String[] args) {
+		ExecutorService pool = Executors.newFixedThreadPool(3) ;
+		Handler handler = new Handler() ;
+		pool.execute(handler);
+	}
+}
+
+class Handler implements Runnable{
+
+	public void run() {
+		
+		System.out.println("the thread has been executed!");
+	}
+}

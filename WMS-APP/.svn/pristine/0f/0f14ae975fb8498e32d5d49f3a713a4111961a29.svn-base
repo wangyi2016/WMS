@@ -1,0 +1,117 @@
+package com.mjzk.agv.beans;
+
+import java.sql.Timestamp;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+/**
+ * 漏读RFID表
+ * 
+ * @author XieChangJiang
+ *
+ */
+
+@Entity
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class MissRfid {
+
+	/**
+	 * 表id
+	 */
+	private int id ;
+	
+	/**
+	 * agv 编码
+	 */
+	private String agv_code ;
+	
+	/**
+	 * 行驶地标列表
+	 */
+	private String line_rfid ;
+	
+	/**
+	 * 漏读地标
+	 */
+	private String miss_rfid ;
+	
+	/**
+	 * 生成线编号
+	 */
+	private short product_num ;
+	
+	/**
+	 * 漏读时间
+	 */
+	private Timestamp time ;
+	
+	public MissRfid() {
+	}
+
+	public MissRfid(int id, String agv_code, String line_rfid, String miss_rfid, short product_num,
+			Timestamp time) {
+		super();
+		this.id = id;
+		this.agv_code = agv_code;
+		this.line_rfid = line_rfid;
+		this.miss_rfid = miss_rfid;
+		this.product_num = product_num;
+		this.time = time;
+	}
+
+	@Id
+	@GeneratedValue
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getAgv_code() {
+		return agv_code;
+	}
+
+	public void setAgv_code(String agv_code) {
+		this.agv_code = agv_code;
+	}
+
+	public String getLine_rfid() {
+		return line_rfid;
+	}
+
+	public void setLine_rfid(String line_rfid) {
+		this.line_rfid = line_rfid;
+	}
+
+	public String getMiss_rfid() {
+		return miss_rfid;
+	}
+
+	public void setMiss_rfid(String miss_rfid) {
+		this.miss_rfid = miss_rfid;
+	}
+
+	public short getProduct_num() {
+		return product_num;
+	}
+
+	public void setProduct_num(short product_num) {
+		this.product_num = product_num;
+	}
+
+	public Timestamp getTime() {
+		return time;
+	}
+
+	public void setTime(Timestamp time) {
+		this.time = time;
+	}
+}

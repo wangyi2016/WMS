@@ -1,0 +1,9 @@
+package com.mjzk.agv.daoimpl;
+import org.springframework.stereotype.Component;
+
+import com.mjzk.agv.base.daoSupportImpl;
+import com.mjzk.agv.beans.AgvState;
+
+@Component
+public class AgvStateDao extends daoSupportImpl<AgvState> {
+}

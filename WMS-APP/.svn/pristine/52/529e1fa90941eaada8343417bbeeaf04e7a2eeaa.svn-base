@@ -1,0 +1,189 @@
+package com.mjzk.agv.algorithm;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Floyd算法,有向图最短路径,对现场路径图的要求：边都顺时针指向
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class Floyd {
+
+	/**
+	 * 如果一个节点没有指向另一个相邻节点的边，则该节点到另一个节点的距离为 max,节点自己到自己的距离也是 max
+	 */
+	private static int max=Integer.MAX_VALUE;
+	
+	/**
+	 * 数组矩阵的长度
+	 */
+	private static int number = 24 ;
+	
+	/**
+	 * 最短路径值
+	 */
+	private int [][]dist=new int[number][number];										
+	
+	/**
+	 * 存储最短路径的长度
+	 */
+	private int [][]path=new int[number][number];										
+	
+	/**
+	 * 最短路径节点
+	 */
+	private ArrayList<Integer> list=new ArrayList<Integer>();
+	
+	/**
+	 * 节点数据矩阵
+	 */
+	
+	/*private static int [][]Arcs={   
+            {max,max,10,max,30,100}, 
+            {max,max,5,max,max,max},
+            {max,max,max,50,max,max},
+            {max,max,max,max,20,10},
+            {max,max,max,max,max,60},
+            {max,max,max,max,max,max}
+    };   
+	
+	private static int [][]Arcs2 = {
+			{max,max,3,max,max,max},
+			{4,max,max,max,max,max},
+			{max,2,max,max,5,max},
+			{max,4,max,max,max,max},
+			{max,max,max,7,max,9},
+			{max,max,max,1,max,max}
+	};*/
+	
+	private int[][] Graph={
+			{max,max,2,max,max,max,max,max,max,max}	,
+			{max,max,1,max,max,max,max,max,max,max},
+			{max,max,max,max,5,max,max,max,max,max},
+			{max,max,max,max,max,2,max,max,max,max},
+			{max,max,max,max,max,2,max,max,max,max},
+			{max,max,max,max,max,max,9,max,max,max},
+			{max,max,max,4,max,max,max,3,max,max},
+			{max,max,max,max,max,max,max,max,1,2},
+			{max,8,max,max,max,max,max,max,max,max},
+			{4,max,max,max,max,max,max,max,max,max}
+	};
+	
+	private int[][] Arcs = {
+		{max,max,3,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max}	,
+		{max,max,3,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max}	,
+		{max,max,max,3,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max}	,
+		{max,max,max,max,4,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max}	,
+		{max,max,max,max,max,max,3,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max}	,
+		{max,max,max,max,max,max,3,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max}	,
+		{max,max,max,max,max,max,max,5,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max}	,
+		{max,max,max,max,max,max,max,max,5,max,max,max,max,max,20,max,max,max,max,max,max,max,max,max}	,
+		{max,max,max,max,max,max,max,max,max,5,max,max,max,max,max,10,max,max,max,max,max,max,max,max}	,
+		{max,max,max,max,max,max,max,max,max,max,3,max,3,max,max,max,max,max,max,max,max,max,max,max},
+		{max,max,max,max,max,max,max,max,max,max,max,3,max,max,max,max,max,max,max,max,max,max,max,max},
+		{max,max,max,max,max,3,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max},
+		{max,max,max,max,max,max,max,max,max,max,max,max,max,3,max,max,max,max,max,max,max,max,max,max}	,
+		{max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,3,3,max,max,max,max,max,max},
+		{max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,20,max},
+		{max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,10,max,max,max,max,max},
+		{max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,4,max,max,max,max,max}	,
+		{max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,4,max,max,max,max}	,
+		{max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,4}	,
+		{4,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max}	,
+		{max,4,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max}	,
+		{max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,4,max,max,max}	,
+		{max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,3,max,max}	,
+		{max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,max,3,max,max}	,
+	} ;
+	
+	/**
+	 * 最短路径封装
+	 * 
+	 * @param begin
+	 * @param end
+	 * @param Arcs
+	 */
+	private void findCheapestPath(int begin, int end, int Arcs[][]) {
+		floyd(Arcs);
+		list.clear();
+		list.add(begin);
+		findPath(begin, end);
+		list.add(end);
+	}
+	
+	/**
+	 * 通过点，搜寻路径
+	 * 
+	 * @param i
+	 * @param j
+	 */
+	private void findPath(int i, int j) {
+		int k = path[i][j];
+		if (k == -1)
+			return;
+		findPath(i, k);
+		list.add(k);
+		findPath(k, j);
+	}
+
+	/**
+	 * Floyd 核心算法
+	 * 
+	 * @param Arcs
+	 */
+	private void floyd(int[][] Arcs) {
+		int n = Arcs.length;
+		for (int i = 0; i < n; i++)
+			for (int j = 0; j < n; j++) {
+				path[i][j] = -1;           // 初始化当前的路径长度表
+				dist[i][j] = Arcs[i][j];   // 初始化当前的路径表
+			}
+
+		for (int k = 0; k < n; k++)
+			for (int i = 0; i < n; i++)
+				for (int j = 0; j < n; j++) {
+					if (dist[i][k] != max && dist[k][j] != max && dist[i][k] + dist[k][j] < dist[i][j]) {
+						dist[i][j] = dist[i][k] + dist[k][j];
+						path[i][j] = k;
+					}
+				}
+	}
+	
+	/**
+	 * 获取两个节点的路径
+	 * @param begin
+	 * @param end
+	 * @return
+	 */
+	public List<Integer> getShortPath(int begin, int end) {
+		findCheapestPath(begin, end, Arcs);
+		ArrayList<Integer> list = this.list;
+		System.out.println(list.toString() + ' ');
+		return list;
+	}
+	
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Floyd f=new Floyd();
+/*		for(int i=0;i<Arcs2.length;i++)
+			for(int j=0;j<Arcs2.length;j++){
+				f.findCheapestPath(i, j, Arcs2);
+				ArrayList<Integer>L=f.list;
+				System.out.print(i+"-->"+j+":");
+				if(f.dist[i][j]==max){
+					System.out.println("之间没有最短路径");
+				System.out.println();
+				}
+				else{
+					System.out.println("的最短路径是：");
+					System.out.print(L.toString()+"	");
+					System.out.println("路径长度:"+f.dist[i][j]);
+					System.out.println();
+				}
+			}*/
+		new Floyd().getShortPath(18, 0) ;
+	}
+}

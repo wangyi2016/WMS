@@ -1,0 +1,12 @@
+package com.mjzk.agv.test;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class Test8 {
+	public static void main(String[] args) throws Exception {
+		ServerSocket serverSocket = new ServerSocket(502) ;
+		Socket socket = serverSocket.accept();
+	}
+}

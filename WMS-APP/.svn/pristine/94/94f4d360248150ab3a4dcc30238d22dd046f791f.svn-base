@@ -1,0 +1,100 @@
+package com.mjzk.agv.common;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import com.mjzk.agv.beans.Agv;
+import com.mjzk.agv.beans.AgvState;
+import com.mjzk.agv.beans.Task;
+import com.mjzk.agv.pojo.Node;
+import com.mjzk.agv.task.TaskQueue;
+import com.mjzk.agv.vehicle.VehicleQueue;
+
+/**
+ * 公用类
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class Common {
+
+	/**
+	 * 于AGV通信的端口
+	 */
+	public static final int PORT = 502;
+
+	/**
+	 * 20个线程的线程池
+	 */
+	public static final ExecutorService pool = Executors.newFixedThreadPool(20);
+
+	/**
+	 * 任务队列
+	 */
+	public static final TaskQueue T_QUEUE = new TaskQueue();
+	
+	/**
+	 * 所有的任务，包括已启动的，没启动的，正在执行的，等待执行的。
+	 */
+	public static final Set<Task> TASK = new HashSet<Task>() ;
+	
+	/**
+	 * 所有的AGV，包括已启动的，没启动的，正在执行的，等待执行的
+	 */
+	public static final Set<Agv> AGVS = new HashSet<Agv>() ;
+
+	/**
+	 * 车辆度列
+	 */
+	public static final VehicleQueue V_QUEUE = new VehicleQueue();
+
+	/**
+	 * AGV 对应的路径
+	 */
+	public static final Map<Agv, List<Node>> path = new HashMap<Agv, List<Node>>();
+
+	/**
+	 * 电量报警下线
+	 */
+	public static final int LOW_ELECTRIC = 300;
+
+	/**
+	 * AGV没跑一轮所需的电量
+	 */
+	public static final int EVERY_POWER = 50;
+
+	/**
+	 * 地图
+	 */
+	public static int[][] mapMatric = null;
+
+	/**
+	 * 充电点
+	 */
+	public static final int chargeRFID = 15;
+
+	/**
+	 * 节点信息
+	 */
+	public static final Set<Node> nodes = new HashSet<Node>();
+
+	/**
+	 * 充电站
+	 */
+	public static final Set<Node> chargeNodes = new HashSet<Node>();
+
+	/**
+	 * 每辆AGV小车当前的状态
+	 */
+	public static final Map<Agv, AgvState> state = new HashMap<Agv, AgvState>();
+
+	/**
+	 * 下一个点事需要标记的点
+	 */
+	public static final int[] Markers = { 0, 1, 4, 5, 22, 23 };
+}

@@ -1,0 +1,101 @@
+<%@page import="com.mjzk.agv.utils.IpUtils"%>
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>名匠中科AGV中央管理系统</title>
+
+
+<link rel="stylesheet" href="css/source/icon.css">
+<link rel="stylesheet" href="css/source/easyui.css">
+<link rel="stylesheet" href="css/source/demo.css">
+<link rel="stylesheet" href="css/header/style.css">
+
+</head>
+<body class="easyui-layout">
+	<div data-options="region:'north',border:false"
+		style="height: 80px; background: #CAE1FF; padding: 10px ;padding:0px;margin:0px;"> 
+		<div class="header"><img alt="" src="image/logo.png"></div>
+		
+		<div class="_user">当前用户:小孩   | <a href="#">退出</a></div>
+      </div>
+		
+	<div data-options="region:'west',split:true,title:'功能菜单'"
+		style="width: 180px; padding-left: 0px; margin-top:15px;"> 
+
+<ul id="tt"  style="margin-left:15px;margin-top:5px;">   
+    <li>   
+        <span>AGV</span>   
+        <ul>   
+            <li>   
+                <span>AGV</span>   
+                <ul> 
+                    <li>   
+                        <span>AGV实时监控</span>   
+                    </li>  
+                    <li>   
+                        <span>AGV管理</span>   
+                    </li>  
+                </ul>   
+            </li>
+        </ul>   
+    </li>   
+    <li>   
+        <span>Node</span>
+				<ul>
+					<li><span>地图查看</span></li>
+				</ul>
+   </li>   
+    <li>   
+        <span>Task</span>
+				<ul>
+					<li><span>任务管理</span></li>
+				</ul>
+   </li>   
+   
+     <li>   
+        <span>其他设置</span>
+				<ul>
+					<li><span>修改密码</span></li>
+				</ul>
+   </li>
+   
+</ul>  
+
+</div>
+	<div data-options="region:'south',border:false"
+		style="height: 30px; line-height:25px; text-align:center;font-size:10px;">@CopyRight 名匠中科 2016.1.7 版权所有,违者必究</div>
+	<div data-options="region:'center'" style="overflow:hidden;">
+       <div id="_tabs" >
+			<div title="起始页" style="padding: 0px 10px; display: block;"
+				iconCls="icon-home">
+				<p>您好!&nbsp;&nbsp;
+					<%
+						Calendar calendar = Calendar.getInstance();
+						calendar.getTime();
+					%>
+					今天是：<%=calendar.get(Calendar.YEAR)%>
+					年
+					<%=calendar.get(Calendar.MONTH) + 1%>
+					月
+					<%=calendar.get(Calendar.DAY_OF_MONTH)%>
+					日 星期
+					<%=calendar.get(Calendar.DAY_OF_WEEK) - 1%>,
+					
+					&nbsp;&nbsp;您当前登录的IP地址是：<%=IpUtils.getIpAddr(request) %>
+					
+			</div>
+			
+		</div>
+	</div>
+	
+<script type="text/javascript" src="js/source/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="js/source/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="js/menu/menu.js"></script>
+</body>
+</html>

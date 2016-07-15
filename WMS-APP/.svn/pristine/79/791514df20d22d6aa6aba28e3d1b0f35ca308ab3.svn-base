@@ -1,0 +1,62 @@
+package com.mjzk.agv.signal;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.mjzk.agv.beans.Agv;
+import com.mjzk.agv.common.Common;
+import com.mjzk.agv.pojo.Node;
+import com.mjzk.agv.pojo.Value;
+
+/**
+ * 信号量
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class Signal {
+
+	/**
+	 * 标记节点。 A -> B , 当 AGV由 A 走向 B的时候，对A点的自己节点标记
+	 * ，对B点进行标记，如果有其他小车想要通过B点时，发现B点已经被标记，则其他AGV暂停行驶，当B点接触标记时，其他AGV在启动通过
+	 * 
+	 * 单进的节点，无需标识临时节点
+	 * 
+	 * @param node
+	 *            这里的Node，没有被加入到 AGV的最短路径中，是一个已经下个节点的明确的节点
+	 * 
+	 */
+	public static synchronized void markNode(Node node) {
+		Map<Node, Value> childs = node.getChilds();
+		Set<Node> set = childs.keySet();
+		for (Node child : set) {
+			child.setFlag(true);
+		}
+	}
+
+	/**
+	 * 解除标记,当AGV通过三角形后，解除节点标记 , 通过当前节点 ， 去找他的上一个节点，的自己节点，并解除其子节点的标记
+	 * 
+	 * @param node
+	 */
+	public static synchronized void removeNode(Node node, Agv agv) {
+		/** 获取该AGV的行驶路径 **/
+		List<Node> pList = Common.path.get(agv);
+
+		/** 当前结点的上一个节点 **/
+		Node Previous = null;
+		for (int i = 0; i < pList.size(); i++) {
+			if (pList.get(i).getRfid() == node.getRfid()) {
+				Previous = pList.get(i - 1);
+				break;
+			}
+		}
+
+		Map<Node, Value> childs = Previous.getChilds();
+		Set<Node> set = childs.keySet();
+		for (Node child : set) {
+			child.setFlag(false);
+		}
+	}
+}

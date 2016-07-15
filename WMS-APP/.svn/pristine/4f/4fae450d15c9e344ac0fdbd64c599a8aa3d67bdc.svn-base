@@ -1,0 +1,34 @@
+package com.mjzk.agv.pojo;
+
+/**
+ * 
+ * 任务管理页面的下拉框数据封装
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class Point {
+
+	private int rfid ;
+	private String name ;
+	public Point() {
+		// TODO Auto-generated constructor stub
+	}
+	public Point(int rfid, String name) {
+		super();
+		this.rfid = rfid;
+		this.name = name;
+	}
+	public int getRfid() {
+		return rfid;
+	}
+	public void setRfid(int rfid) {
+		this.rfid = rfid;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+}

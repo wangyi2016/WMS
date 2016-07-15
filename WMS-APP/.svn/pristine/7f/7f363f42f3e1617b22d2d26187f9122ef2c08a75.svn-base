@@ -1,0 +1,26 @@
+package com.mjzk.agv.serviceimpl;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.mjzk.agv.beans.Task;
+import com.mjzk.agv.daoimpl.TaskDao;
+
+@Service
+public class TaskService {
+
+	@Resource
+	private TaskDao taskDao;
+
+	/**
+	 * 保存当前任务
+	 * 
+	 * @param task
+	 */
+	@Transactional
+	public void save(Task task) {
+		taskDao.save(task);
+	}
+}

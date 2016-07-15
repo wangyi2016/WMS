@@ -1,0 +1,51 @@
+package com.mjzk.agv.test;
+
+import java.net.Socket;
+
+public class Test7 extends Thread{
+
+	private boolean isConnect(){
+		boolean ret = false ;
+		try{
+			Socket socket = new Socket("192.168.1.113", 502);
+			socket.setTcpNoDelay(true);
+			socket.setSoLinger(true, 1);
+			socket.setSoTimeout(0);
+			socket.setKeepAlive(false);
+			socket.setReceiveBufferSize(10240);
+			System.out.println("连接成功.....");
+			ret = true ;
+		}catch(Exception e){
+			ret = false ;
+		}
+		return ret ;
+	}
+	
+	
+	@Override
+	public void run() {
+
+            while(true){
+            	while(!isConnect()){
+            		System.out.println("正在尝试重新连接 ......");
+            		try {
+						sleep(2 * 1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+            	}
+            	System.out.println("连接成功!");
+            	while(true){
+            		System.out.println("正在解析数据.....");
+            		try {
+						sleep(2 * 1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+            	}
+            }
+	}
+	public static void main(String[] args) {
+		new Test7().start();
+	}
+}

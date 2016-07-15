@@ -1,0 +1,78 @@
+package com.mjzk.agv.pojo;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * 节点
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class Node {
+	/**
+	 * 节点名称
+	 */
+	private String name;
+
+	/**
+	 * 内部表示，innerName 用来表示 图数据矩阵中下标 , 比如 数据矩阵 int[][] G,中， 10,01
+	 * 数字0代表实际场景中的A点，1代表B点。
+	 */
+	private int rfid;
+
+	/**
+	 * 该节点是否被标识，如果被标识，则需要经过这个节点的AGV暂停。默认为没有被标识
+	 */
+	private boolean flag = false;
+
+	/**
+	 * 子节点
+	 */
+	private Map<Node, Value> childs = new HashMap<Node, Value>();
+
+	public Node() {
+	}
+
+	public Node(String name, int rfid) {
+		this.name = name;
+		this.rfid = rfid;
+		this.flag = false ;
+	}
+
+	public Node(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getRfid() {
+		return rfid;
+	}
+
+	public void setRfid(int rfid) {
+		this.rfid = rfid;
+	}
+
+	public Map<Node, Value> getChilds() {
+		return childs;
+	}
+
+	public void setChilds(Map<Node, Value> childs) {
+		this.childs = childs;
+	}
+
+	public boolean isFlag() {
+		return flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
+}

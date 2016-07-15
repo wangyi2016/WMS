@@ -1,0 +1,14 @@
+package com.mjzk.agv.vehicle;
+
+/**
+ * 车辆管理
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class VehicleManager {
+
+	public VehicleQueue queue ;
+	
+	
+}

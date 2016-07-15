@@ -1,0 +1,12 @@
+package com.mjzk.agv.communicate;
+
+/**
+ * 通信管理
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class CommunicateManager {
+
+	
+}

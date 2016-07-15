@@ -1,0 +1,119 @@
+package com.mjzk.agv.task;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
+import com.mjzk.agv.beans.Agv;
+import com.mjzk.agv.beans.Task;
+
+/**
+ * 任务队列,新加的任务和为完成的任务,优先级最高的任务放在队列的最前面,相同优先级的任务时间早的放在队列的前面
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class TaskQueue {
+	/**
+	 * 存放任务的队列
+	 */
+	public Queue<Task> queue = new LinkedList<Task>();
+
+	public TaskQueue() {
+	}
+
+	/**
+	 * 添加新的任务到任务队列中,并对队列重新排序。优先级高的放在最前面，相同优先级的时间早的前面
+	 * 
+	 * @param task
+	 */
+	public void addTask(Task task) {
+		Queue<Task> temp = new LinkedList<Task>();
+		if (queue.size() == 0) {
+			/** 如果当前队列中没有任务,则直接将任务添加到队列中 **/
+			queue.offer(task);
+			return ;
+		} else {
+			/** 如果当前队列中有任务,则需要判断队列中已有任务的优先级 ,根据优先级和时间重新对队列进行排序 **/
+			Task mj_Task = null;
+			boolean flag = false;
+			for (int i = 0; i < queue.size(); i++) {
+				mj_Task = queue.poll();
+				if (flag) {
+					temp.offer(mj_Task);
+					mj_Task = null;
+				} else {
+					if (task.getPriority() <= mj_Task.getPriority()) { /**
+																		 * 如果新任务比队列的第一个任务的优先级要小或者相同，
+																		 * 则添加到其后面
+																		 **/
+						temp.offer(mj_Task);
+					} else {
+						temp.offer(task); /** 如果新任务比对头任务的优先级还要高，则直接将新任务添加到对头 **/
+						temp.offer(mj_Task);
+						mj_Task = null;
+						flag = true;
+					}
+				}
+			}
+		}
+		queue = temp;
+		temp = null;
+	}
+
+	/**
+	 * 获取当前正在等在执行的任务
+	 * @return
+	 */
+	public synchronized List<Task> getTasks(){
+		List<Task> list = new ArrayList<Task>() ;
+		Iterator<Task> iterator = queue.iterator() ;
+		while(iterator.hasNext()){
+			Task task = iterator.next() ;
+			list.add(task) ;
+		}
+		return list ;
+	}
+	
+	/**
+	 * 
+	 * @param code
+	 */
+	public synchronized void removeTask(String code) {
+		Iterator<Task> iterator = queue.iterator();
+		while (iterator.hasNext()) {
+			Task task = iterator.next();
+			if (task.getTask_code().equals(code)) {
+				queue.remove(task);
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * 获取队列中的任务
+	 * 
+	 * @return
+	 */
+	public Task getTask() {
+		if (queue.size() == 0) {
+			/** 如果当前任务中没有任务， **/
+			return null;
+		}
+		return queue.poll();
+	}
+
+	public Queue<Task> getQueue() {
+		return queue;
+	}
+
+	public void setQueue(Queue<Task> queue) {
+		this.queue = queue;
+	}
+
+	public int getSize() {
+		return queue.size();
+	}
+}

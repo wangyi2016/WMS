@@ -1,0 +1,96 @@
+package com.mjzk.agv.pojo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.mjzk.agv.beans.AgvState;
+
+/**
+ * 分页封装
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class Pager {
+
+	/**
+	 * 每页的行数
+	 */
+	private int rows;
+
+	/**
+	 * 第多少页
+	 */
+	private int pageNumber;
+
+	/**
+	 * 总页数
+	 */
+	private int totalPage;
+
+	/**
+	 * 总记录数
+	 */
+	private int totalCount;
+	
+	/**
+	 * 当前查询的数据
+	 */
+	private List<AgvState> curList = new ArrayList<AgvState>();
+
+	/**
+	 * 默认每行显示5条，第一页
+	 */
+	public Pager() {
+		this.rows = 5;
+		this.pageNumber = 1;
+	}
+
+	public Pager(int rows, int pageNumber, int totalPage, int totalCount) {
+		super();
+		this.rows = rows;
+		this.pageNumber = pageNumber;
+		this.totalPage = totalPage;
+		this.totalCount = totalCount;
+	}
+
+	public int getRows() {
+		return rows;
+	}
+
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+
+	public int getPageNumber() {
+		return pageNumber;
+	}
+
+	public void setPageNumber(int pageNumber) {
+		this.pageNumber = pageNumber;
+	}
+
+	public int getTotalPage() {
+		return totalPage;
+	}
+
+	public void setTotalPage(int totalPage) {
+		this.totalPage = totalPage;
+	}
+
+	public int getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
+	}
+
+	public List<AgvState> getCurList() {
+		return curList;
+	}
+
+	public void setCurList(List<AgvState> curList) {
+		this.curList = curList;
+	}
+}

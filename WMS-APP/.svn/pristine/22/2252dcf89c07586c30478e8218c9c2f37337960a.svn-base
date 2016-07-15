@@ -1,0 +1,272 @@
+$(function(){
+	taskManage();
+	listNodes();
+	
+	$("#task_add").dialog({
+		width : 370,
+		title : "新增任务",
+		modal:true,
+		closed:true,
+		buttons : [ {
+			text : "确定",
+			iconCls : "icon-ok",
+			handler : function() {
+				/**提交表单内容**/
+				$.ajax({
+					url:"mjzk/newtask",
+					type:"post",
+					data :{
+						name:$("#task_desc option:selected").text(),
+						Priority:$("#Priority option:selected").text(),
+						startRfid:$("#start").combobox('getValue'),
+						targetRfid:$("#target").combobox('getValue'),
+						go:$("#go").val()
+					},
+					beforeSend:function(){
+						$.messager.progress({
+							text:"正在提交中 ...."
+						}) ;
+					},
+					success :function(data,response,status){
+						$.messager.progress('close');
+						$("#task_add").dialog("close");
+						$("#task").datagrid("reload");
+					}
+				})
+			},
+		}, {
+			text : "取消",
+			iconCls : 'icon-redo',
+			handler : function() {
+				$("#task_add").dialog('close').form('reset');
+			}
+		} ]
+	})
+	$("#task_update").dialog({
+		width : 370,
+		title : "修改任务",
+		modal:true,
+		closed:true,
+		buttons : [ {
+			text : "确定",
+			iconCls : "icon-ok",
+			handler : function() {
+				/**提交表单内容**/
+				$.ajax({
+					url:"mjzk/newtask",
+					type:"post",
+					data :{
+						task_code:$("#taskcode").val(),
+						name:$("#task_name option:selected").text(),
+						Priority:$("#taskpriority option:selected").text(),
+						startRfid:$("#taskstart").combobox('getValue'),
+						targetRfid:$("#tasktarget").combobox('getValue'),
+						go:$("#taskgo").val()
+					},
+					beforeSend:function(){
+						$.messager.progress({
+							text:"正在提交中 ...."
+						}) ;
+					},
+					success :function(data,response,status){
+						$.messager.progress('close');
+						$("#task_update").dialog("close");
+						$("#task").datagrid("reload");
+					}
+				})
+			},
+		}, {
+			text : "取消",
+			iconCls : 'icon-redo',
+			handler : function() {
+				$("#task_update").dialog('close').form('reset');
+			}
+		} ]
+	})
+	
+}) ;
+
+/**节点下拉列表**/
+function listNodes(){
+	$("#start").combobox({
+		url : "mjzk/nodelist",
+		valueField : 'rfid',
+		textField : 'name'
+	});
+	$("#start").combobox('select',1) ;
+	$("#target").combobox({
+		url : "mjzk/nodelist",
+		valueField : 'rfid',
+		textField : 'name'
+	});
+	$("#target").combobox('select',1) ;
+}
+
+/**任务管理**/
+function taskManage(){
+	
+	
+	
+	$("#task").datagrid({
+		url:"mjzk/listtask",
+//		fit:true,
+		fitColumns:true,
+		striped:true,
+		rownumbers:true,
+		border:false,
+	    pagination:true,
+	    sortOrder:'desc',
+	    striped:true,
+	    selectOnCheck: true,
+		columns:[[
+		          {
+		        	  field:'task_code',
+		        	  width:100,
+		        	  title:'任务编码'
+		          },
+		          {
+		        	  field:'name',
+		        	  width:100,
+		        	  title:'任务描述'
+		          },
+		          {
+		        	  field:'priority',
+		        	  width:100,
+		        	  title:'任务优先级'
+		          },
+		          {
+		        	  field:'startRfid',
+		        	  width:100,
+		        	  title:'起始点'
+		          },
+		          {
+		        	  field:'targetRfid',
+		        	  width:100,
+		        	  title:'目标点'
+		          },
+		          {
+		        	  field:'go',
+		        	  width:100,
+		        	  title:'管理状态',
+		        	  formatter:function(value,row,index){
+		        		  var code = row.task_code ;
+		        		  if(value == 1){
+		        			  if(row.status == true){
+		        				  var btn = "<a href='javascript:void(0)' onclick='javascript:breakTask()'>点击脱离任务队列</a>";
+		        				  return btn ;
+		        			  }
+		        			  var btn = "<a href='javascript:void(0)' onclick='javascript:breakTask("+'"' + code +'"'+ ','+ value+")'>点击脱离任务队列</a>";
+		        			  return btn ;
+		        		  }
+		        		  var btn = "<a href='javascript:void(0)' onclick='javascript:breakTask("+'"' + code +'"'+','+ value+")'>点击加入任务队列</a>";
+	        			  return btn ;
+		        	  }
+		          },
+		          {
+		        	  field:'status',
+		        	  width:100,
+		        	  title:'任务状态',
+		        	  formatter : function(value,row,index) {
+		        		  if(row.go == 1){
+								if(value == false){
+									return '当前任务正在等待调度中...';
+								}else{
+									return '当前任务正在执行中...' ;
+								}
+							}
+							return "未启用，待加入管理...";
+					  }
+		          },
+				{
+					field : 'opt2',
+					title : '操作',
+					width:100,
+					formatter : function(value,row,index) {
+						var btn = "<a class='editcls' href='javascript:void(0)' onclick='javascript:updateTask("+'"' + row.task_code +'"'+ ','+ row.go+")';>修改</a>";
+						return btn;
+					}
+			} 
+				
+		    ]]
+	});
+	
+	var pager = $("#task").datagrid().datagrid('getPager');
+	pager.pagination({
+		buttons:[{
+			iconCls:'icon-add',
+			handler:function(){
+				$("#task_add").dialog("open");
+				$("#code").focus();
+			}
+		}]
+	});
+}
+
+/**获取需要修改的任务信息**/
+function updateTask(code,go){
+	
+//	alert(code + " " + go);
+	$.ajax({
+		url : "mjzk/taskUpdate",
+		type : "post",
+		data : {
+			task_code : code,
+			go : go
+		},
+		beforeSend : function() {
+			$.messager.progress({
+				text : "正在提交中 ...."
+			});
+		},
+		success : function(data) {
+			$.messager.progress('close');
+			 var obj = eval('(' + data + ')');
+			 
+			 $("#taskstart").combobox({
+					url : "mjzk/nodelist",
+					valueField : 'rfid',
+					textField : 'name'
+				});
+				$("#taskstart").combobox('select',obj.startRfid) ;
+				$("#tasktarget").combobox({
+					url : "mjzk/nodelist",
+					valueField : 'rfid',
+					textField : 'name'
+				});
+				$("#tasktarget").combobox('select',obj.targetRfid) ;
+			$("#taskcode").val(obj.task_code) ; 
+			 
+//			task_desc:$("#task_desc").val(obj.name);
+            $("#taskpriority").val(obj.priority) ;
+            go:$("#taskgo").val(obj.go);
+			$("#task_update").dialog("open");
+		}
+	});
+}
+
+
+function breakTask(){
+	alert("AGV正在执行中，不能使用该操作!");
+}
+
+/**点击脱离车辆队列**/
+function breakTask(code,go){
+	/**提交表单内容**/
+	$.ajax({
+		url : "mjzk/taskOperate",
+		type : "post",
+		data : {
+			task_code : code,
+			go : go
+		},
+		beforeSend : function() {
+			$.messager.progress({
+				text : "正在提交中 ...."
+			});
+		},
+		success : function(data, response, status) {
+			$.messager.progress('close');
+			$("#task").datagrid("reload");
+		}
+	});
+}

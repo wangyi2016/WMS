@@ -1,0 +1,143 @@
+package com.mjzk.agv.beans;
+
+import java.sql.Timestamp;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+/**
+ * 任务完成后需要保存的数据
+ * 
+ * @author XieChangJiang
+ *
+ */
+@Entity
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class TaskFinish {
+
+	/**
+	 * agv 编码
+	 */
+	private String agv_code;
+
+	/**
+	 * 任务编码
+	 */
+	private String task_code;
+
+	/**
+	 * 表 id
+	 */
+	private int id;
+
+	/**
+	 * 任务名称
+	 */
+	private String name;
+
+	/**
+	 * rfid 列表
+	 */
+	private String rfid_lines;
+
+	/**
+	 * 目标RFID
+	 */
+	private String target_rfid;
+
+	/**
+	 * 任务优先级
+	 */
+	private short priority;
+
+	/**
+	 * 任务的完成时间
+	 */
+	private Timestamp finish_time;
+
+	public TaskFinish() {
+	}
+
+	public TaskFinish(String agv_code, String task_code, int id, String name, String rfid_lines, String target_rfid,
+			short priority) {
+		super();
+		this.agv_code = agv_code;
+		this.task_code = task_code;
+		this.id = id;
+		this.name = name;
+		this.rfid_lines = rfid_lines;
+		this.target_rfid = target_rfid;
+		this.priority = priority;
+	}
+
+	public String getAgv_code() {
+		return agv_code;
+	}
+
+	public void setAgv_code(String agv_code) {
+		this.agv_code = agv_code;
+	}
+
+	public String getTask_code() {
+		return task_code;
+	}
+
+	public void setTask_code(String task_code) {
+		this.task_code = task_code;
+	}
+
+	@Id
+	@GeneratedValue
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getRfid_lines() {
+		return rfid_lines;
+	}
+
+	public void setRfid_lines(String rfid_lines) {
+		this.rfid_lines = rfid_lines;
+	}
+
+	public String getTarget_rfid() {
+		return target_rfid;
+	}
+
+	public void setTarget_rfid(String target_rfid) {
+		this.target_rfid = target_rfid;
+	}
+
+	public short getPriority() {
+		return priority;
+	}
+
+	public void setPriority(short priority) {
+		this.priority = priority;
+	}
+
+	public Timestamp getFinish_time() {
+		return finish_time;
+	}
+
+	public void setFinish_time(Timestamp finish_time) {
+		this.finish_time = finish_time;
+	}
+}

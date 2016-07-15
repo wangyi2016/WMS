@@ -1,0 +1,56 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>用户注册</title>
+<script src="js/source/jquery-1.10.2.js"></script>
+
+<link rel="stylesheet" type="text/css" href="css/login/login.css"/>
+<link href="botom_nav/footer1.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+<div id="container_login">
+
+<div class="content">
+<div class="left_content">
+<img  src="image/register/login_banner.png"/>
+</div><!--left end-->
+<div class="right_content">
+<div class="right_img_login"><h1 style="margin-top:-20px;">用户注册</h1>
+</div>
+<div class="login_background">
+	<form id="form" action="register" method="post">
+		<div class="div_username"><span>请输入新用户名：</span><br /><input id="account"  type="text" name="user.account" style="height:30px; width:250px; border-radius:5px;" /><span id="eraccount" style=" color:red;"></span></div>
+		<div class="div_password"><span>请设置密码：</span><br /><input id="password" type="password" name="" style="height:30px; width:250px; border-radius:5px;"/><span id="erpassword" style=" color:red;"></span></div>
+		<div class="div_password"><span>请重复密码：</span><br /><input id="password2" type="password" name="user.password" style="height:30px; width:250px; border-radius:5px;"/><span id="erpassword2" style=" color:red;">${message }</span></div>
+		
+		<div class="btn_login" id="login" style="margin-top:30px;">注册</div>
+	</form>
+<span class="span_new_count"><a href="login.jsp">老用户登录</a></span>
+</div>
+</div><!--right end-->
+</div><!--content end-->
+</div><!--container_login end-->
+<script type="text/javascript">
+$(document).ready(function(){
+	  $("#login").click(function(){
+		  if($("#account").val()==""){
+			  $("#eraccount").text("用户名不能为空！");
+		  }else if($("#password").val()==""){
+			  $("#erpassword").text("密码不能为空！");
+		  }else if($("#password2").val()==""){
+			  $("#erpassword2").text("密码不能为空！");
+		  }else if($("#password").val()!=$("#password2").val()){
+			  $("#erpassword2").text("2次密码不相同！");
+		  }else{
+			  $("#form").submit();
+		  }
+	  });
+	});
+
+</script>
+</body>
+</html>

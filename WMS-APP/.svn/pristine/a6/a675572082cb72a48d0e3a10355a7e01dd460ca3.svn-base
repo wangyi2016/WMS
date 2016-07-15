@@ -1,0 +1,34 @@
+package com.mjzk.agv.test;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+import com.mjzk.agv.factory.InstructFactory;
+
+public class Test5 {
+	
+	public static void main(String[] args) {
+		try {
+			Socket socket = new Socket("192.168.1.200", 502) ;
+			DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
+			DataInputStream inputStream = new DataInputStream(socket.getInputStream());
+			int length = 0;
+			byte[] bytes = new byte[512] ;
+			outputStream.write(InstructFactory.getDefaultReadRegInstruct()); /** 发送读AGV请求 **/
+			length = inputStream.read(bytes); /** 获取AGV发回的信息 **/
+            for (int i = 0; i < length; i++) {
+            	System.out.print(bytes[i]);
+			}
+			
+			
+			System.out.println("connect successfully");
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}

@@ -1,0 +1,123 @@
+@charset "utf-8";
+/* CSS Document */
+
+#container_login {
+	float: left;
+	height: 90%;
+	width: 90%;
+	margin-bottom:60px;
+	margin-top:10%;
+	margin-left:10%;
+	margin-right:auto;
+}
+span{
+	font-size:14px;}
+ .top_logo {
+	float: left;
+	height: auto;
+	width: 100%;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	margin-left: 15%;
+ }
+ .top_logo .img_middle {
+	margin-right: 20px;
+	margin-left: 20px;
+	float: left;
+ }#container_login .content {
+	float: left;
+	margin-left: 15%;
+}
+.content .left_content {
+	float: left;
+	width: 40%;
+}
+.right_content .right_img_login {
+	float: left;
+	margin-left: 42%;
+	margin-bottom:20px;
+}
+
+.content .right_content {
+	float: left;
+}
+
+.right_content .login_background {
+	float: left;
+	height: 325px;
+	width: 358px;
+	background-image: url(../image/register/login_kuangzi.png);
+	margin-left: 25%;
+}
+.login_background .div_username {
+	width:250px;
+	float: left;
+	margin-top: 25px;
+	margin-left: 50px;
+}
+.login_background .forget_pas {
+	margin-top: 15px;
+	margin-right: 50px;
+	float: right;
+	width: 80px;
+	color: #DADADA;
+}
+.login_background .btn_login {
+	float: left;
+	height: 30px;
+	width: 250px;
+	margin-left: 50px;
+	margin-top: 10px;
+	background-color: #A1D825;
+	color: #FFFFFF;
+	text-align: center;
+	line-height: 30px;
+	font-size: 18px;
+	font-weight: bolder;
+	cursor: pointer;
+}
+.login_background .span_new_count {
+	float: right;
+	width: 100px;
+	margin-top: 5px;
+	margin-right: 20px;
+	font-size: 12px;
+	color: #339900;
+}
+
+
+.right_content .remeber_number {
+	float: left;
+	margin-left: 50px;
+	margin-top: 60px;
+	color: #999;
+	font-size: 14px;
+	height:20px;
+	
+}
+
+
+.login_background .div_password {
+	float: left;
+	margin-top: 20px;
+	margin-left: 50px;
+	width:250px;
+}
+.div_password span {
+	float: left;
+	margin-bottom: 10px;
+	color: #999;
+}
+.div_username span {
+	float: left;
+	margin-bottom: 10px;
+	color: #999;
+}
+
+.top_logo .top_head1 {
+	float: left;
+}
+.top_logo .img_head3 {
+	float: left;
+	margin-top: 30px;
+}

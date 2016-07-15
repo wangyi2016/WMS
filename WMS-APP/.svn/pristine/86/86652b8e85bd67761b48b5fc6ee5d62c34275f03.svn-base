@@ -1,0 +1,159 @@
+package com.mjzk.agv.pojo;
+
+/**
+ * 
+ * 封装 AGV的实时数据，返回给前台页面
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class AgvRTData {
+	
+	private int id ;
+	
+	private String agvCode ;
+
+	private String ip_Adr ;
+	
+	private int prodNum ;
+	
+	private String taskName ;
+	
+	private String link ;
+	
+	private String curFRID ;
+	
+	private String targetRFID ;
+	
+	private float curElectric ;
+	
+	private int curSpd ;
+	
+	private int runState ;
+	
+	private String taskCode ;
+	
+	public AgvRTData() {}
+	
+	public AgvRTData(String agvCode, String ip_Adr, int prodNum, String taskName, String taskCode,String link, String curFRID,
+			String targetRFID, float curElectric, int curSpd, int runState, String time) {
+		super();
+		this.agvCode = agvCode;
+		this.ip_Adr = ip_Adr;
+		this.prodNum = prodNum;
+		this.taskName = taskName;
+		this.taskCode = taskCode;
+		this.link = link;
+		this.curFRID = curFRID;
+		this.targetRFID = targetRFID;
+		this.curElectric = curElectric;
+		this.curSpd = curSpd;
+		this.runState = runState;
+		this.time = time;
+	}
+
+	private String time ;
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getAgvCode() {
+		return agvCode;
+	}
+
+	public void setAgvCode(String agvCode) {
+		this.agvCode = agvCode;
+	}
+
+	public String getIp_Adr() {
+		return ip_Adr;
+	}
+
+	public void setIp_Adr(String ip_Adr) {
+		this.ip_Adr = ip_Adr;
+	}
+
+	public int getProdNum() {
+		return prodNum;
+	}
+
+	public void setProdNum(int prodNum) {
+		this.prodNum = prodNum;
+	}
+
+	public String getTaskName() {
+		return taskName;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+
+	public String getCurFRID() {
+		return curFRID;
+	}
+
+	public void setCurFRID(String curFRID) {
+		this.curFRID = curFRID;
+	}
+
+	public String getTargetRFID() {
+		return targetRFID;
+	}
+
+	public void setTargetRFID(String targetRFID) {
+		this.targetRFID = targetRFID;
+	}
+
+	public float getCurElectric() {
+		return curElectric;
+	}
+
+	public void setCurElectric(float curElectric) {
+		this.curElectric = curElectric;
+	}
+
+	public int getCurSpd() {
+		return curSpd;
+	}
+
+	public void setCurSpd(int curSpd) {
+		this.curSpd = curSpd;
+	}
+
+	public int getRunState() {
+		return runState;
+	}
+
+	public void setRunState(int runState) {
+		this.runState = runState;
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+	public String getTaskCode() {
+		return taskCode;
+	}
+
+	public void setTaskCode(String taskCode) {
+		this.taskCode = taskCode;
+	}
+}

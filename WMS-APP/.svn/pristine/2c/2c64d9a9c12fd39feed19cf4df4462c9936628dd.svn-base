@@ -1,0 +1,112 @@
+/**
+ * 
+ */
+$(function() {
+
+	password_tool = {
+		add : function(){
+			$("#xiugai").dialog("open");
+			$("#code").focus();
+		}	
+	} ;
+	
+	$("#xiugai").dialog({
+		width : 370,
+		title : "修改密码",
+		modal:true,
+		closed:true,
+		buttons : [ {
+			text : "确定",
+			iconCls : "icon-ok",
+			handler : function() {
+			
+				$("#msg").text("");
+				$("#eroldpd").text("");
+				$("#ernewpd").text("");
+				$("#ernewpd2").text("");
+				if($("#oldpd").val()==""){
+					$("#eroldpd").text("不能为空！");
+				}else if($("#newpd").val()==""){
+					$("#ernewpd").text("不能为空！");
+				}else if($("#newpd2").val()==""){
+					$("#ernewpd2").text("不能为空！");
+				}else if($("#newpd2").val()!=$("#newpd").val()){
+					$("#ernewpd2").text("2次密码输入不一致！");
+				}else{
+					/**提交表单内容**/
+					$.ajax({
+						url:"changepd",
+						type:"post",
+						data :{
+							password:$("#newpd2").val(),oldpassword:$("#oldpd").val()
+						},
+						beforeSend:function(){
+							$.messager.progress({
+								text:"正在提交中 ...."
+							}) ;
+						},
+						success :function(data){
+							$.messager.progress('close');
+							 var jsonobj=eval('('+data+')');
+							 if(jsonobj.success){
+								 $("#msg").text("密码修改成功！");
+							 }else{
+								 $("#msg").text("密码修改失败！");
+							 }
+							$("#eroldpd").text("");
+							$("#ernewpd").text("");
+							$("#ernewpd2").text("");
+							/*$("#xiugai").dialog("close");
+							$("#agvlist").datagrid("reload");*/
+						},
+						
+					}
+					)
+					}
+			},
+		}, {
+			text : "取消",
+			iconCls : 'icon-redo',
+			handler : function() {
+				$("#msg").text("");
+				$("#oldpd").val("");
+				$("#newpd").val("");
+				$("#newpd").val("");
+				$("#newpd2").val("");
+				$("#eroldpd").text("");
+				$("#ernewpd").text("");
+				$("#ernewpd2").text("");
+				$("#xiugai").dialog('close').form('reset');
+			}
+		} ]
+	})
+})
+
+/*数字验证*/
+function isNumber(value){
+	 var reg=/^[0-9]*$/;      
+     return reg.test(value);
+}
+
+/*ip验证*/
+function isIP(ip)  
+{  
+    var reSpaceCheck = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/;  
+    if (reSpaceCheck.test(ip))  
+    {  
+        ip.match(reSpaceCheck);  
+        if (RegExp.$1<=255&&RegExp.$1>=0  
+          &&RegExp.$2<=255&&RegExp.$2>=0  
+          &&RegExp.$3<=255&&RegExp.$3>=0  
+          &&RegExp.$4<=255&&RegExp.$4>=0)  
+        {  
+            return true;   
+        }else  
+        {  
+            return false;  
+        }  
+    }else{  
+        return false;  
+    }  
+}
+

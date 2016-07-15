@@ -1,0 +1,153 @@
+package com.mjzk.agv.action;
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import com.mjzk.agv.base.BaseAction;
+import com.mjzk.agv.beans.User;
+import com.mjzk.agv.pojo.Node;
+import com.mjzk.agv.serviceimpl.UserService;
+import com.mjzk.agv.utils.MD5Utils;
+
+@ParentPackage("struts-default")
+@Controller
+@Scope("prototype")
+public class LoginAction extends BaseAction<Node>{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/*
+	 * @Resource private AgvStateService statusService;
+	 */
+	
+	private String password;
+	private String oldpassword;
+	private User user;//用户对象
+	@Resource
+	private UserService userService;
+	
+	private String  message;
+	
+	@Action(value = "login", results = { @Result(name = "success", location = "/main.jsp"), @Result(name = "error", location = "/login.jsp")})
+	public String login() {
+		HttpServletRequest request=ServletActionContext.getRequest();
+		
+		if (user!=null&&!user.getAccount().equals(null)) {
+			 user.setPassword(MD5Utils.md5(user.getPassword()));
+			 request.getSession().setAttribute("user", user);
+			 if (userService.login(user)) {
+				return SUCCESS;
+			}
+			 message="账号密码错误！！";
+		}
+		return ERROR;
+	}
+
+	@Action(value = "out", results = { @Result(name = "success", location = "/login.jsp")})
+	public String outUser() {
+		HttpServletRequest request=ServletActionContext.getRequest();
+		 request.getSession().removeAttribute("user");
+		return SUCCESS;
+	}
+	
+	@Action(value = "changepd", results = { @Result(name = "success", location = "/WEB-INF/jsondata/data.jsp")})
+	public String change() {
+		HttpServletRequest request=ServletActionContext.getRequest();
+		HttpServletResponse response=ServletActionContext.getResponse();
+		        //以下代码从JSON.java中拷过来的
+		        response.setContentType("text/html");
+		        PrintWriter out;
+		        try {
+					out = response.getWriter();
+					//将要被返回到客户端的对象
+			        JSONObject json=new JSONObject();
+			        user=(User) request.getSession().getAttribute("user");
+			        if (MD5Utils.md5(oldpassword).equals(user.getPassword())) {
+			        	user=userService.findUser(user);
+			        	user.setPassword(MD5Utils.md5(password));
+			        	
+			        	if (userService.upbdate(user)) {
+			        		request.getSession().setAttribute("user", user);
+							json.accumulate("success", true);
+						} else {
+							json.accumulate("success", false);
+						}
+					} else {
+						json.accumulate("success", false);
+					}
+			        out.println(json.toString());
+			        out.flush();
+			        out.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		return SUCCESS;
+	}
+	
+	@Action(value = "register", results = { @Result(name = "success", location = "/main.jsp"), @Result(name = "error", location = "/register.jsp")})
+	public String register() {
+		HttpServletRequest request=ServletActionContext.getRequest();
+		
+		if (user!=null&&!user.getAccount().equals(null)) {
+			
+			user.setPassword(MD5Utils.md5(user.getPassword()));
+			System.out.println(user.getPassword());
+			 if (userService.saveUser(user)) {
+				request.getSession().setAttribute("user", user);
+				return SUCCESS;
+			}
+			 message="注册失败！";
+		}
+		return ERROR;
+	}
+	
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getOldpassword() {
+		return oldpassword;
+	}
+
+	public void setOldpassword(String oldpassword) {
+		this.oldpassword = oldpassword;
+	}
+}

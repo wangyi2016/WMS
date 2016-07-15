@@ -1,0 +1,269 @@
+$(function() {
+	agvManage();
+
+	manager_tool = {
+		add : function(){
+			$("#manage_add").dialog("open");
+			$("#code").focus();
+		}	
+	} ;
+	
+	$("#manage_add").dialog({
+		width : 370,
+		title : "添加AGV",
+		modal:true,
+		closed:true,
+		buttons : [ {
+			text : "确定",
+			iconCls : "icon-ok",
+			handler : function() {
+				$("#erip").text("");
+				$("#ercode").text("");
+				$("#erspd").text("");
+				$("#erprod").text("");
+				if($("#code").val()==""){
+					$("#ercode").text("不能为空！");
+				}
+				else if(!isIP($("#ip").val())){
+					$("#erip").text("ip地址错误！");
+				}else if($("#prod").val()==""){
+					$("#erprod").text("不能为空！");
+				}else if($("#spd").val()==""){
+					$("#erspd").text("不能为空！");
+				}else if(!isNumber($("#prod").val())){
+					$("#erprod").text("只能输入数字！");
+				}else if(!isNumber($("#spd").val())){
+					$("#erspd").text("初始速度：只能输入数字！");
+				}else{
+					/**提交表单内容**/
+					$.ajax({
+						url:"mjzk/addagv",
+						type:"post",
+						data :{
+							agv_code:$("#code").val(),
+							ip_Adr:$("#ip").val(),
+							product_num:$("#prod").val(),
+							initSpd:$("#spd").val(),
+							agv_desc:$("#desc").val()
+						}
+					,
+						beforeSend:function(){
+							
+							$.messager.progress({
+								text:"正在提交中 ...."
+							}) ;
+						},
+						success :function(data,response,status){
+							$.messager.progress('close');
+							$("#manage_add").dialog("close");
+							$("#agvlist").datagrid("reload");
+						}
+					}
+					)
+					}
+			},
+		}, {
+			text : "取消",
+			iconCls : 'icon-redo',
+			handler : function() {
+				$("#erip").text("");
+				$("#ercode").text("");
+				$("#erspd").text("");
+				$("#erprod").text("");
+				$("#manage_add").dialog('close').form('reset');
+			}
+		} ]
+	})
+})
+
+/*数字验证*/
+function isNumber(value){
+	 var reg=/^[0-9]*$/;      
+     return reg.test(value);
+}
+
+/*ip验证*/
+function isIP(ip)  
+{  
+    var reSpaceCheck = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/;  
+    if (reSpaceCheck.test(ip))  
+    {  
+        ip.match(reSpaceCheck);  
+        if (RegExp.$1<=255&&RegExp.$1>=0  
+          &&RegExp.$2<=255&&RegExp.$2>=0  
+          &&RegExp.$3<=255&&RegExp.$3>=0  
+          &&RegExp.$4<=255&&RegExp.$4>=0)  
+        {  
+            return true;   
+        }else  
+        {  
+            return false;  
+        }  
+    }else{  
+        return false;  
+    }  
+}
+
+/**AGV管理**/
+function agvManage(){
+	
+	$("#agvlist").datagrid({
+		url:"mjzk/allagv.action",
+//		fit:true,
+		fitColumns:true,
+		striped:true,
+		rownumbers:true,
+		border:false,
+	    pagination:true,
+	    sortOrder:'desc',
+	    striped:true,
+	    toolbar:'#manager_tool',
+	    selectOnCheck: true,
+		columns:[[
+		          {
+		        	  field:'agv_code',
+		        	  width:100,
+		        	  title:'AGV编码',
+		          },
+		          {
+		        	  field:'agv_desc',
+		        	  width:100,
+		        	  title:'描述'
+		          },
+		          {
+		        	  field:'ip_Adr',
+		        	  width:100,
+		        	  title:'AGV IP地址'
+		          },
+		          {
+		        	  field:'product_num',
+		        	  width:100,
+		        	  title:'当前生产线'
+		          },
+		          {
+		        	  field:'lowBattery',
+		        	  width:100,
+		        	  title:'电量下限值'
+		          },
+		          {
+		        	  field:'initSpd',
+		        	  width:100,
+		        	  title:'初始速度'
+		          },
+		          {
+		        	  field:'go',
+		        	  width:100,
+		        	  title:'管理状态',
+		        	  formatter:function(value,row,index){
+		        		  var code = row.agv_code ;
+		        		  if(value == 1){
+		        			  if(row.run_Flag == true){
+		        				  var btn = "<a href='javascript:void(0)' onclick='javascript:breakAGV()'>点击脱离车辆队列</a>";
+		        				  return btn ;
+		        			  }
+		        			  var btn = "<a href='javascript:void(0)' onclick='javascript:breakAGV("+'"' + code +'"'+ ','+ value+")'>点击脱离车辆队列</a>";
+		        			  return btn ;
+		        		  }
+		        		  var btn = "<a href='javascript:void(0)' onclick='javascript:breakAGV("+'"' + code +'"'+','+ value+")'>点击加入车辆队列</a>";
+	        			  return btn ;
+		        	  }
+		          },
+							{
+									field : 'run_Flag',
+									title : '状态',
+									width:100,
+									formatter : function(value,row,index) {
+										if(row.go == 1){
+											if(value == false){
+												return '已启动，等待任务中...';
+											}else{
+												return '已启动，正在执行任务...' ;
+											}
+										}
+										return "未启动，待加入管理...";
+									}
+							},
+							{
+					        	  field:'opt',
+					        	  width:100,
+					        	  title:'操作',
+					        	  formatter:function(value,row,index){
+					        		  if(row.go == 1 && row.run_Flag == true){
+					        			  var btn = "<a href='javascript:void(0)' onclick='javascript:breakAGV()'>修改</a>";
+				        				  return btn ;
+					        		  }
+					        		  var btn = "<a href='javascript:void(0)' onclick='javascript:updateAGV("+'"' + row.agv_code +'"'+ ','+ row.go+")'>修改</a>";
+				        			  return btn ;
+					        	  }
+					          }
+		    ]]
+	})
+	
+	var pager = $("#agvlist").datagrid().datagrid('getPager');
+	pager.pagination({
+		buttons:[{
+			iconCls:'icon-add',
+			handler:function(){
+				$("#manage_add").dialog("open");
+				$("#code").focus();
+			}
+		}]
+	});
+}
+
+/**修改AGV信息**/
+function updateAGV(code,go){
+	
+//	alert(code + " " + go);
+	$.ajax({
+		url : "mjzk/agvUpdate",
+		type : "post",
+		data : {
+			agv_code : code,
+			go : go
+		},
+		beforeSend : function() {
+			$.messager.progress({
+				text : "正在提交中 ...."
+			});
+		},
+		success : function(data) {
+			$.messager.progress('close');
+			 var obj = eval('(' + data + ')'); 
+            $("#code").val(obj.agv_code);
+			$("#ip").val(obj.ip_Adr);
+			$("#prod").val(obj.product_num);
+			$("#spd").val(obj.initSpd);
+			$("#desc").val(obj.agv_desc);
+			$("#go").val(obj.go);
+			go:$("#manage_add").dialog("open");
+		}
+	});
+}
+
+
+function breakAGV(){
+	alert("AGV正在执行中，不能使用该操作!");
+}
+
+/**点击脱离车辆队列**/
+function breakAGV(code,go){
+	/**提交表单内容**/
+	$.ajax({
+		url : "mjzk/agvOperate",
+		type : "post",
+		data : {
+			agv_code : code,
+			go : go
+		},
+		beforeSend : function() {
+			$.messager.progress({
+				text : "正在提交中 ...."
+			});
+		},
+		success : function(data, response, status) {
+			$.messager.progress('close');
+			$("#agvlist").datagrid("reload");
+		}
+	});
+}

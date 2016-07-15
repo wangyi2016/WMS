@@ -1,0 +1,158 @@
+package com.mjzk.agv.factory;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+import com.mjzk.agv.pojo.InstructSet;
+
+
+/**
+ * 指令加工厂,对需要发送的直接进行封装
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class InstructFactory {
+
+	/**
+	 * 获取默认的读寄存器指令,起始地址 0x00 , 读取长度10个字节
+	 * 
+	 * @return
+	 */
+	public static byte[] getDefaultReadRegInstruct() {
+		byte[] readReg = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x01, 0x03, 0x00, 0x00, 0x00, 0x07 };
+		return readReg;
+	}
+
+	/**
+	 * 获取指定长度的读寄存器指令,起始地址0x00 , 读取长度length个字节
+	 * 
+	 * @param length
+	 *            地址长度 < 128
+	 * @return
+	 */
+	public static byte[] getReadRegInstruct(int length) {
+		byte[] readReg = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x01, 0x03,0x00 };
+		byte[] hex = hexStringToBytes(Integer.toHexString(length)) ;
+		byte[] reg = new byte[readReg.length + hex.length] ;
+		System.arraycopy(readReg, 0, reg, 0, readReg.length);
+		System.arraycopy(hex, 0, reg, readReg.length, hex.length);
+		return reg;
+	}
+	
+	/**
+	 * 获取写寄存器指令,
+	 * 
+	 * @param data
+	 *            要写的数据
+	 * @param begin
+	 *            寄存器起始地址
+	 * @param end
+	 *            寄存器结束地址
+	 * @return
+	 */
+	public static byte[] getWriteRegInstruct(InstructSet set) {
+		
+		byte[] write = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x01, 0x10, 0x00, 0x00, 0x00, 0x05, 0x0a,
+				0x00, 0x01, 0x00, set.getTargetSpd(), 0x00, set.getLeftOrRight(), 0x00 , set.getTargetRfid(),0x00,set.getRunstatus()};
+		
+		System.out.println("getWriteRegInstruct: ");
+		return write;
+	}
+
+	/**
+	 * 返回一个指定的字符
+	 * 
+	 * @param c
+	 * @return
+	 */
+	private static byte charToByte(char c) {
+		return (byte) "0123456789ABCDEF".indexOf(c);
+	}
+
+	/**
+	 * 将十六进制的字符串 转成 byte数组
+	 * 
+	 * @param hexString
+	 * @return
+	 */
+	public static byte[] hexStringToBytes(String hexString) {
+		if (hexString == null || hexString.equals("")) {
+			return null;
+		}
+		hexString = hexString.toUpperCase();
+		int length = hexString.length() / 2;
+		char[] hexChars = hexString.toCharArray();
+		byte[] d = new byte[length];
+		for (int i = 0; i < length; i++) {
+			int pos = i * 2;
+			d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
+		}
+		return d;
+	}
+
+	/**
+	 * 将十六进制转化为十进制
+	 */
+	public static int hexToDecimal(int i, byte[] bytes) {
+		int highOrder = bytes[i] & 0xff;
+		int lowOrder = bytes[i + 1] & 0xff;
+		int highnumber = 0;
+		if (highOrder != 0) {
+			/** 如果高位不等于0 **/
+			if (highOrder <= 9) {
+				highnumber = highOrder * 16 * 16;
+			} else {
+				/** 高位大于10 **/
+				String split = highOrder + "";
+				highnumber = Integer.parseInt(split.substring(0, 1)) * 16 * 16 * 16
+						+ Integer.parseInt(split.substring(1)) * 16 * 16;
+			}
+		}
+		return highnumber + lowOrder;
+	}
+	
+	public static void main(String[] args) {
+
+	//	System.out.println(Integer.toHexString(111));
+
+		byte[] bytes = hexStringToBytes(Integer.toHexString(111));
+		
+		byte[] readReg = {0x00, 0x00, 0x00, 0x00 ,0x00 ,0x06,0x01,0x03,11} ;
+		
+		byte[] t = new byte[bytes.length + readReg.length] ;
+		
+		System.arraycopy(readReg, 0, t,0 , readReg.length);
+		System.arraycopy(bytes, 0, t, readReg.length, bytes.length);
+		
+		System.out.println(t.length);
+		
+		
+		for (int i = 0; i < t.length; i++) {
+			System.out.print(t[i]);
+		}
+		
+		try {
+			Socket socket = new Socket("127.0.0.1", 7080) ;
+			OutputStream outputStream = socket.getOutputStream() ;
+			
+			while(true){
+				outputStream.write(t);
+				try {
+					Thread.sleep(4000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		int y = 1 ;
+        System.out.print("the byte is: " + (byte)y);
+	}
+}

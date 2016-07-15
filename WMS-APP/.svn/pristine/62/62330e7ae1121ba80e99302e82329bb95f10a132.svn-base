@@ -1,0 +1,39 @@
+package com.mjzk.agv.pojo;
+
+/**
+ * NOde节点的权值和方位
+ */
+public class Value {
+
+	/**
+	 * 权值
+	 */
+	public int weight;
+
+	/**
+	 * 0 直走，1 左转 ，2 右转
+	 */
+	public int direc;
+
+	public Value(int weight, int direc) {
+		super();
+		this.weight = weight;
+		this.direc = direc;
+	}
+
+	public int getWeight() {
+		return weight;
+	}
+
+	public void setWeight(int weight) {
+		this.weight = weight;
+	}
+
+	public int getDirec() {
+		return direc;
+	}
+
+	public void setDirec(int direc) {
+		this.direc = direc;
+	}
+}

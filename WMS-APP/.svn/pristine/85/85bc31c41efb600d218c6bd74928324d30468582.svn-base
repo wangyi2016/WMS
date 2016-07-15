@@ -1,0 +1,29 @@
+package com.mjzk.agv.algorithm;
+
+import java.util.List;
+
+public class FloydManager {
+
+	/**
+	 * 获取最短路径和最短路径值, 无向图的最短路径
+	 * 
+	 * @param G
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public static List<Integer> getNoDirectPath(int start, int end) {
+		return new FloydTemp().getFloyd(start, end);
+	}
+
+	/**
+	 * 获取有向图的最短路径
+	 * 
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public static List<Integer> getDirectPath(int start, int end) {
+		return new Floyd().getShortPath(start, start);
+	}
+}

@@ -1,0 +1,124 @@
+package com.mjzk.agv.beans;
+
+import java.sql.Timestamp;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+@Entity
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+public class Alarm {
+
+	/**
+	 * 表id
+	 */
+	private int id ;
+	
+	/**
+	 * agv 编码
+	 */
+	private String agv_code ;
+	
+	/**
+	 * 报警时间
+	 */
+	private Timestamp time ;
+	
+	/**
+	 * 报警类型
+	 */
+	private short alarm_type ;
+	
+	/**
+	 * 报警车间编号
+	 */
+	private short alarm_plant ;
+	
+	/**
+	 * 报警路段
+	 */
+	private short alarm_line ;
+	
+	/**
+	 * 报警地标
+	 */
+	private String alarm_rfid ;
+
+	public Alarm() {
+	}
+	
+	public Alarm(int id, String agv_code, Timestamp time, short alarm_type, short alarm_plant, short alarm_line,
+			String alarm_rfid) {
+		super();
+		this.id = id;
+		this.agv_code = agv_code;
+		this.time = time;
+		this.alarm_type = alarm_type;
+		this.alarm_plant = alarm_plant;
+		this.alarm_line = alarm_line;
+		this.alarm_rfid = alarm_rfid;
+	}
+
+	@Id
+	@GeneratedValue
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getAgv_code() {
+		return agv_code;
+	}
+
+	public void setAgv_code(String agv_code) {
+		this.agv_code = agv_code;
+	}
+
+	public Timestamp getTime() {
+		return time;
+	}
+
+	public void setTime(Timestamp time) {
+		this.time = time;
+	}
+
+	public short getAlarm_type() {
+		return alarm_type;
+	}
+
+	public void setAlarm_type(short alarm_type) {
+		this.alarm_type = alarm_type;
+	}
+
+	public short getAlarm_plant() {
+		return alarm_plant;
+	}
+
+	public void setAlarm_plant(short alarm_plant) {
+		this.alarm_plant = alarm_plant;
+	}
+
+	public short getAlarm_line() {
+		return alarm_line;
+	}
+
+	public void setAlarm_line(short alarm_line) {
+		this.alarm_line = alarm_line;
+	}
+
+	public String getAlarm_rfid() {
+		return alarm_rfid;
+	}
+
+	public void setAlarm_rfid(String alarm_rfid) {
+		this.alarm_rfid = alarm_rfid;
+	}
+}

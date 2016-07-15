@@ -1,0 +1,144 @@
+package com.mjzk.agv.schedule;
+
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.util.Enumeration;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
+import org.apache.log4j.Logger;
+
+import com.mjzk.agv.common.Common;
+import com.mjzk.agv.pojo.Node;
+import com.mjzk.agv.pojo.Value;
+
+/**
+ * 调度管理器,调度的原理,时刻判断任务队列中是否有任务，如果有任务，则需要调度，没有任务，则监视，等到有任务的时候调度
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class ScheduleManager implements ServletContextListener {
+
+	private static Logger logger = Logger.getLogger(ServletContextListener.class);
+
+	/**
+	 * 服务启动的时候，启动调度线程,时刻监听是否有任务需要调度
+	 */
+	public void contextInitialized(ServletContextEvent event) {
+
+		logger.info("正在初始化数据........");
+		
+		initNode();
+		
+		logger.info("已启动调度监控线程 .....");
+
+	//	Common.pool.execute(new ScheduleHandler());
+	}
+
+	/**
+	 * 当 服务器停止的时候，将已经启动的线程全部停止，关闭所有的数据库连接
+	 */
+	public void contextDestroyed(ServletContextEvent event) {
+		System.out.println("trying to stop the server.........");
+		logger.debug("trying to stop the threads..............");
+		Common.pool.shutdownNow();
+		destoryJDBCDriver();
+	}
+	
+	private void destoryJDBCDriver(){
+		final Enumeration<java.sql.Driver> drivers = DriverManager.getDrivers() ;
+		Driver driver = null;
+		while(drivers.hasMoreElements()){
+			driver = drivers.nextElement();
+			try {
+				DriverManager.deregisterDriver(driver);
+			} catch (Exception e) {
+			}
+		}
+	}
+	public void initNode(){
+		Node nodeA = new Node("A", 0) ;
+		Node nodeB = new Node("B", 1) ;
+		Node nodeC = new Node("C", 2) ;
+		Node nodeD = new Node("D", 3) ;
+		Node nodeE = new Node("E", 4) ;
+		Node nodeF = new Node("F", 5) ;
+		Node nodeG = new Node("G", 6) ;
+		Node nodeH = new Node("H", 7) ;
+		Node nodeI = new Node("I", 8) ;
+		Node nodeJ = new Node("J", 9) ;
+		Node nodeK = new Node("K", 10) ;
+		Node nodeL = new Node("L", 11) ;
+		Node nodeM = new Node("M", 12) ;
+		Node nodeN = new Node("N", 13) ;
+		Node nodeO = new Node("O", 14) ;
+		Node nodeP = new Node("P", 15) ;
+		Node nodeQ = new Node("Q", 16) ;
+		Node nodeR = new Node("R", 17) ;
+		Node nodeS = new Node("S", 18) ;
+		Node nodeT = new Node("T", 19) ;
+		Node nodeU = new Node("U", 20) ;
+		Node nodeV = new Node("V", 21) ;
+		Node nodeW = new Node("W", 22) ;
+		Node nodeX = new Node("X", 23) ;
+		
+		nodeA.getChilds().put(nodeC, new Value(3, 0)) ; /** 0是左,1是右**/
+		nodeB.getChilds().put(nodeC, new Value(3, 1)) ;
+		nodeC.getChilds().put(nodeD, new Value(3, 1)) ;
+		nodeD.getChilds().put(nodeE, new Value(4, 1)) ;
+		nodeE.getChilds().put(nodeG, new Value(3, 1)) ;
+		nodeF.getChilds().put(nodeG, new Value(3,0)) ;
+		nodeG.getChilds().put(nodeH, new Value(5, 0)) ;
+		nodeH.getChilds().put(nodeI, new Value(5, 0)) ;
+		nodeH.getChilds().put(nodeO, new Value(20, 1)) ;
+		nodeI.getChilds().put(nodeJ, new Value(5, 0)) ;
+		nodeI.getChilds().put(nodeP, new Value(10, 1)) ;
+		nodeJ.getChilds().put(nodeK, new Value(3, 0)) ;
+		nodeJ.getChilds().put(nodeM, new Value(3, 1)) ;
+		nodeK.getChilds().put(nodeL, new Value(3, 0)) ;
+		nodeL.getChilds().put(nodeF, new Value(3, 0)) ;
+		nodeM.getChilds().put(nodeN, new Value(3, 1)) ;
+		nodeN.getChilds().put(nodeQ, new Value(3, 1)) ;
+		nodeN.getChilds().put(nodeR, new Value(3, 0)) ;
+		nodeO.getChilds().put(nodeW, new Value(20, 1)) ;
+		nodeP.getChilds().put(nodeS, new Value(10, 1)) ;
+		nodeQ.getChilds().put(nodeS, new Value(4, 0)) ;
+		nodeR.getChilds().put(nodeT, new Value(4, 0)) ;
+		nodeS.getChilds().put(nodeX, new Value(4, 0));
+		nodeT.getChilds().put(nodeA, new Value(3, 0)) ;
+		nodeU.getChilds().put(nodeB, new Value(4, 1)) ;
+		nodeV.getChilds().put(nodeU, new Value(4, 1)) ;
+		nodeW.getChilds().put(nodeV, new Value(3, 1)) ;
+		nodeX.getChilds().put(nodeV, new Value(3, 0)) ;
+		
+		Common.nodes.add(nodeA) ;
+		Common.nodes.add(nodeB) ;
+		Common.nodes.add(nodeC) ;
+		Common.nodes.add(nodeD) ;
+		Common.nodes.add(nodeE) ;
+		Common.nodes.add(nodeF) ;
+		Common.nodes.add(nodeG) ;
+		Common.nodes.add(nodeH) ;
+		Common.nodes.add(nodeI) ;
+		Common.nodes.add(nodeJ) ;
+		Common.nodes.add(nodeK) ;
+		Common.nodes.add(nodeL) ;
+		Common.nodes.add(nodeM) ;
+		Common.nodes.add(nodeN) ;
+		Common.nodes.add(nodeO) ;
+		Common.nodes.add(nodeP) ;
+		Common.nodes.add(nodeQ) ;
+		Common.nodes.add(nodeR) ;
+		Common.nodes.add(nodeS) ;
+		Common.nodes.add(nodeT) ;
+		Common.nodes.add(nodeU) ;
+		Common.nodes.add(nodeV) ;
+		Common.nodes.add(nodeW) ;
+		Common.nodes.add(nodeX) ;
+		
+		Common.chargeNodes.add(nodeO) ;
+		Common.chargeNodes.add(nodeP) ;
+	}
+}

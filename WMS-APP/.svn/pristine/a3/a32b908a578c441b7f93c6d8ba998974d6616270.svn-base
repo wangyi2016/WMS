@@ -1,0 +1,76 @@
+package com.mjzk.agv.vehicle;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
+import com.mjzk.agv.beans.Agv;
+
+/**
+ * 空闲车辆队列，无需优先级，只要有空闲车辆，则将车辆加入到队列中
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class VehicleQueue {
+
+	/**
+	 * 车辆队列
+	 */
+	private Queue<Agv> queue = new LinkedList<Agv>();
+
+	/**
+	 * 将AGV添加到队列中
+	 * 
+	 * @param agv
+	 */
+	public void addVehicle(Agv agv) {
+		queue.offer(agv);
+	}
+
+	public Agv getVehicle() {
+		if (queue.size() == 0) {
+			return null;
+		}
+		return queue.poll();
+	}
+
+	public Queue<Agv> getQueue() {
+		return queue;
+	}
+
+	public void setQueue(Queue<Agv> queue) {
+		this.queue = queue;
+	}
+	
+	public int getSize(){
+		return queue.size() ;
+	}
+	/**获取AGV**/
+	public synchronized List<Agv> getAgv(){
+		List<Agv> list = new ArrayList<Agv>();
+		Iterator<Agv> iterator = queue.iterator() ;
+		while(iterator.hasNext()){
+			Agv agv = iterator.next();
+			list.add(agv) ;
+		}
+		return list ;
+	}
+	
+	/**
+	 * 
+	 * @param code
+	 */
+	public synchronized void removeAGV(String code) {
+		Iterator<Agv> iterator = queue.iterator();
+		while (iterator.hasNext()) {
+			Agv agv = iterator.next();
+			if (agv.getAgv_code().equals(code)) {
+				queue.remove(agv);
+				break;
+			}
+		}
+	}
+}

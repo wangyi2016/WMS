@@ -1,0 +1,79 @@
+package com.mjzk.agv.action;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import com.mjzk.agv.base.BaseAction;
+import com.mjzk.agv.common.Common;
+import com.mjzk.agv.pojo.Node;
+import com.mjzk.agv.pojo.Point;
+
+import net.sf.json.JSONArray;
+
+@Namespace("/mjzk")
+@ParentPackage("struts-default")
+@Controller
+@Scope("prototype")
+public class NodeAction extends BaseAction<Node> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	public String execute() throws Exception {
+		return super.execute();
+	}
+
+	/**
+	 * 获取Node的 name和RFID
+	 * 
+	 * @return 
+	 *          url: mjzk/nodelist
+	 */
+	@Action(value = "nodelist", results = { @Result(name = "success", location = "/WEB-INF/jsondata/data.jsp") })
+	public String getNodeList() {
+		List<Point> list= getPoint() ;
+        JSONArray object = JSONArray.fromObject(list) ;
+		HttpServletRequest request = ServletActionContext.getRequest() ;
+        request.setAttribute("attrs", object.toString());
+		return SUCCESS;
+	}
+
+	/**
+	 * 节点管理,返回json数组
+	 * 
+	 * @return
+	 */
+	@Action(value = "nodeManage", results = { @Result(name = "success", location = "/WEB-INF/jsondata/data.jsp") })
+	public String nodeManage() {
+		HttpServletRequest request = ServletActionContext.getRequest();
+		return SUCCESS;
+	}
+	
+	/**获取节点**/
+	public List<Point> getPoint(){
+		List<Point> list = new ArrayList<Point>() ;
+        Set<Node> set = Common.nodes ;
+        Iterator<Node> iterator = set.iterator();
+        while(iterator.hasNext()){
+        	Node node = iterator.next() ;
+        	Point point = new Point(node.getRfid(), node.getName()) ;
+        	list.add(point) ;
+        }
+		return list ;
+	}
+}

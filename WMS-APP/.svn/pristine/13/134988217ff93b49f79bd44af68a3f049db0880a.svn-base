@@ -1,0 +1,134 @@
+package com.mjzk.agv.map;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import com.mjzk.agv.algorithm.Floyd;
+import com.mjzk.agv.beans.Agv;
+import com.mjzk.agv.common.Common;
+import com.mjzk.agv.pojo.Node;
+
+/**
+ * 地图管理
+ * 
+ * @author XieChangJiang
+ *
+ */
+public class MapManager {
+
+	/**
+	 * 
+	 */
+	private Agv agv;
+
+	public MapManager(Agv agv) {
+		this.agv = agv;
+	}
+
+	/**
+	 * 根据当前RFID去找下一个RFID的方向
+	 * 
+	 * @param currentRFID
+	 * @return
+	 */
+	public int getNextNodeDirect(int currentRFID) {
+		List<Node> linkNode = Common.path.get(agv);
+
+		int direct = 0;
+		for (int i = 0; i < linkNode.size(); i++) {
+			if (linkNode.get(i).getRfid() == currentRFID) {
+				direct = linkNode.get(i).getChilds().get(linkNode.get(i + 1)).getDirec();
+				break;
+			}
+		}
+		return direct;
+	}
+	/**
+	 * 根据RFID路径获取Node路径
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public static List<Node> getPathNode(List<Integer> path) {
+
+		List<Node> pathNode = new ArrayList<Node>();
+
+		for (int i = 0; i < path.size(); i++) {
+			int rfid = path.get(i);
+
+			Iterator<Node> iterator = Common.nodes.iterator();
+			while (iterator.hasNext()) {
+				Node node = (Node) iterator.next();
+				if (node.getRfid() == rfid) {
+					pathNode.add(node);
+					break;
+				}
+			}
+		}
+		for (Node node : pathNode) {
+			System.out.print(" " + node.getName());
+		}
+		System.out.println("");
+		return pathNode;
+	}
+	
+	/**
+	 * 获取路径字符串
+	 * @param path
+	 * @return
+	 */
+	public static String getPathString(int startrfid,int endrfid){
+		List<Integer> path = new Floyd().getShortPath(startrfid, endrfid);
+        String nodeString = "" ;
+		for (int i = 0; i < path.size(); i++) {
+			int rfid = path.get(i);
+
+			Iterator<Node> iterator = Common.nodes.iterator();
+			while (iterator.hasNext()) {
+				Node node = (Node) iterator.next();
+				if (node.getRfid() == rfid) {
+					nodeString = nodeString + node.getName()+" -> " ; 
+					break;
+				}
+			}
+		}
+		nodeString = nodeString.substring(0, nodeString.length() - 4);
+		return nodeString ;
+	}
+	/**
+	 * 找当前结点的下一个节点
+	 * 
+	 * @param node
+	 * @return
+	 */
+	public Node getNextNode(int curRFID) {
+		List<Node> linkNode = Common.path.get(agv);
+		Node node = null;
+		for (int i = 0; i < linkNode.size(); i++) {
+			if (linkNode.get(i).getRfid() == curRFID) {
+				node = linkNode.get(i + 1);
+				break;
+			}
+		}
+		return node;
+	}
+
+	/**
+	 * 根据当前RFID获取当前结点
+	 * 
+	 * @param curRFID
+	 * @return
+	 */
+	public Node getCurNode(int curRFID) {
+		List<Node> linkNode = Common.path.get(agv);
+		Node node = null;
+		for (int i = 0; i < linkNode.size(); i++) {
+			if (linkNode.get(i).getRfid() == curRFID) {
+				node = linkNode.get(i);
+				break;
+			}
+		}
+		return node;
+	}
+}

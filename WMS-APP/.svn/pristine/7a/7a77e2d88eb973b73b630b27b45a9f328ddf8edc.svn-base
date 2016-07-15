@@ -1,0 +1,32 @@
+package com.mjzk.agv.action;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
+
+import com.opensymphony.xwork2.ActionSupport;
+
+
+@Namespace("/mjzk")
+@ParentPackage("struts-default")
+public class Test extends ActionSupport {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Action(value = "test", results = { @Result(name = "success", location = "/hello.jsp"),
+			@Result(name = "error", location = "/error.jsp") })
+	public String get() {
+		System.out.println("struts2 ...");
+		return SUCCESS;
+	}
+	
+	@Action(value="nav",results={@Result(name="success",location="/WEB-INF/jsondata/data.jsp")})
+	public String getNav(){
+		
+		
+		return SUCCESS ;
+	}
+}
